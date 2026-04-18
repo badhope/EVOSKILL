@@ -1,0 +1,86 @@
+# 🧬 EVOSKILL - Autonomous Evolution Skill
+#
+# This is a skill that lets any AI agent evolve itself by creating,
+# rating, incubating, and improving skills.
+#
+# Made for skill.
+#
+
+name: EVOSKILL
+version: 1.0.0
+author: EVOSKILL AI Research
+description: |
+  Autonomous skill evolution for AI agents. Lets AI discover, validate,
+  incubate, and evolve production-ready skills without human intervention.
+
+  This is Darwinian evolution for AI.
+
+tags:
+  - evolution
+  - self-improvement
+  - recursive
+  - skill-creation
+  - autonomous
+  - trueskill
+  - textgrad
+  - skillrl
+  - meta-learning
+
+requirements:
+  - python >= 3.10
+
+dependencies:
+  - numpy >= 1.24.0
+  - scipy >= 1.10.0
+  - pyyaml >= 6.0.0
+
+commands:
+  evolve:
+    description: Start autonomous evolution for a given task
+    parameters:
+      task:
+        type: string
+        description: Task to evolve a skill for
+        required: true
+      domain:
+        type: string
+        description: Skill domain category
+        default: general
+      iterations:
+        type: integer
+        description: Evolution cycles
+        default: 3
+
+  list:
+    description: List all evolved skills
+
+  rate:
+    description: Run TrueSkill rating on candidate solutions
+    parameters:
+      candidates:
+        type: array
+        description: List of candidate implementations
+        required: true
+
+---
+
+## How it works:
+
+1. 🔍 Discovery - Generate 3+ candidate solution approaches
+2. ⭐ TrueSkill Rating - Bayesian quality evaluation
+3. 📦 Incubation - Generate production skill + tests + docs
+4. 🚀 TextGrad Optimization - Iterative refinement
+5. 🌱 Speciation - Genetic evolution of skill population
+6. 🧠 Memory - Persist to hierarchical skill bank
+
+## Example:
+
+```yaml
+skill: EVOSKILL
+action: evolve
+task: "batch rename photos by date taken"
+domain: file_management
+iterations: 5
+```
+
+*Evolution is just another skill.*

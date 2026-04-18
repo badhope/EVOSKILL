@@ -5,14 +5,13 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "evoskill"
 version = "1.0.0"
-description = "🧬 EVOSKILL - Autonomous AI Skill Evolution Framework"
+description = "🧬 EVOSKILL - An AI Agent Skill that creates better skills"
 description-long = """
-EVOSKILL is the world's first open-source framework enabling Large Language Models
-to achieve recursive self-improvement without weight updates. Built on SkillRL,
-TextGrad, and TrueSkill research, EVOSKILL enables AI to autonomously discover,
-validate, incubate, and evolve production-ready skills - no retraining required.
+EVOSKILL is a skill for AI agents that enables them to autonomously discover,
+rate, incubate, and evolve production-ready skills. It's just a skill, that
+makes more skills.
 
-This is Darwinian evolution for AI.
+This is recursion for AI.
 """
 readme = "README.md"
 license = {text = "MIT"}
@@ -56,9 +55,6 @@ dependencies = [
     "pyyaml>=6.0.0",
     "pydantic>=2.0.0",
 ]
-
-[project.scripts]
-evoskill = "evoskill.cli:main"
 
 [project.optional-dependencies]
 openai = ["openai>=1.0.0"]

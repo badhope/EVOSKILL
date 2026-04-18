@@ -4,217 +4,110 @@
 
 # 🧬 EVOSKILL
 
-### Just another skill that creates better skills.
+### An AI Agent Skill, that creates better skills.
 
-*So that's evolution, I guess.*
+*Yes, that's recursion.*
 
 <br>
 
+[![Skill](https://img.shields.io/badge/Type-Agent%20Skill-purple?style=flat-square)]()
 [![Python](https://img.shields.io/badge/Python-3.10+-blue?style=flat-square)](https://python.org)
 [![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)](LICENSE)
 [![Stars](https://img.shields.io/github/stars/badhope/EVOSKILL?style=flat-square&color=gold)](https://github.com/badhope/EVOSKILL/stargazers)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](CONTRIBUTING.md)
 
 ---
-
-**[ English ]** | **[ 中文](#-中文)**
-
-<br>
 
 </div>
 
 ---
 
-## 🤔 What's this?
+## 🤔 What is this?
 
-Okay, so LLMs are amazing at problem-solving. But they re-invent the wheel **every single time**.
+This is **a skill for AI agents**.
 
-EVOSKILL is my weekend project trying to fix this.
+LLMs keep re-inventing the wheel every time. This skill lets them stop doing that.
 
-Instead of re-reasoning about "how to rename files" or "debug a regex" for the 1000th time, what if the AI could:
+When your agent figures something out that actually works, EVOSKILL:
 
-1. 🧪 Figure out when it discovers something that actually works
-2. 📦 Package that knowledge into a reusable skill
-3. ⭐ Actually rate how good that skill is (not just "it ran!")
-4. 📈 Make that skill better over time
-5. 🏛️ Put the actually-useful ones on a metaphorical shelf
+1. 🧪 Notices that this wasn't just a one-off solution
+2. 📦 Packages it into a reusable skill
+3. ⭐ Actually rates how good that skill is (not just "it ran!")
+4. 📈 Makes the skill better over time
+5. 🏛️ Puts the actually-useful ones on a shelf
 
-That's it. Nothing revolutionary. Just... sensible.
-
----
-
-## 🔬 The (very) experimental results
-
-I ran some numbers:
-
-| Approach | Success Rate | Token Burn |
-|----------|-------------|------------|
-| Vanilla LLM | 68% | 1x |
-| Memory Agent | 82% | 3x |
-| EVOSKILL | ~90% | 1.2x |
-
-Your mileage may vary. Probably will.
+That's it. Just a skill, that makes more skills.
 
 ---
 
-## 🚀 Quick experiment
-
-```bash
-pip install evoskill
-```
+## 🚀 Use this skill in your agent
 
 ```python
-import asyncio
 from evoskill import EvolutionEngine
 
-async def lets_see():
-    engine = EvolutionEngine()
-    
-    result = await engine.evolve(
-        "batch rename photos by the date they were taken",
-        domain="file_stuff"
-    )
-    
-    print(f"ID: {result['skill_id']}")
-    print(f"Claimed success rate: {result['success_rate']:.1%}")
-    print(f"TrueSkill rating: {result['rating']:.1f}")
+# Give your agent the power of evolution 🧬
+agent.skills.append(EvolutionEngine())
 
-asyncio.run(lets_see())
+# Now your agent can autonomously:
+#  - Discover when a new skill is needed
+#  - Create and rate candidate implementations
+#  - Incubate production-ready skills
+#  - Evolve existing skills to be better
 ```
 
-⚠️ **Fair warning**: This is research code. 
-It might:
-- Work perfectly
-- Accidentally give you 7 slightly wrong skills
-- Teach itself to procrastinate
+It's just another skill your agent can use.
 
 ---
 
-## 🧩 How it (tries to) work(s)
+## 🔬 How this skill works
+
+Seven simple stages:
 
 ```
-Stage 1: 🎯 "Wait, this might be a pattern"
-Stage 2: 🔍 "Let me try 3 different ways"
-Stage 3: ⭐ "Actually... that one wasn't that good"
-Stage 4: 📦 "Okay let's make this reusable"
-Stage 5: 🚀 "Actually I can make this even better"
-Stage 6: 🌱 "Hmm what if I combine #4 and #6?"
-Stage 7: 🧠 "Okay I should remember this one"
+🎯 Stage 1: "Wait, this task is a pattern"
+🔍 Stage 2: "Let me try 3 different ways"
+⭐ Stage 3: "Actually... that one wasn't that good"
+📦 Stage 4: "Okay let's make this reusable"
+🚀 Stage 5: "Actually I can make this even better"
+🌱 Stage 6: "Hmm what if I combine #4 and #6?"
+🧠 Stage 7: "Okay I should remember this one"
 ```
-
-Seven whole stages. Wow.
 
 ---
 
-## 📚 Standing on the shoulders of giants
+## 📚 Research credits (these people are way smarter)
 
-This project wouldn't exist without these actual papers:
-
-| Paper | Year | Venue | What we stole borrowed |
+| Paper | Year | Venue | What we use |
 |-------|------|-------|-------------|
-| **SkillRL** | 2026 | ICLR | The SKILLBANK idea was too good |
+| **SkillRL** | 2026 | ICLR | Hierarchical SKILLBANK was too good an idea |
 | **TextGrad** | 2025 | Nature | "Feedback is gradients. Duh." |
-| **TrueSkill** | 2005 | NIPS | Microsoft figured out rating in 2005. We're just catching up. |
-| **Memento-Skills** | 2025 | NeurIPS | *Actual* memory, not just a vector store |
-
-So if this works, thank them. If it doesn't, blame me.
+| **TrueSkill** | 2005 | NIPS | Microsoft figured out skill rating in 2005 |
+| **Memento-Skills** | 2025 | NeurIPS | Actual memory, not just a vector store |
 
 ---
 
-## 🆚 The "versus everyone" table
+## 📁 Just a skill, not a framework
 
-| Feature | EVOSKILL | CrewAI | AutoGen | LangGraph |
-|---------|----------|--------|---------|-----------|
-| Tries to learn from experience | ✅ | ❌ | ❌ | ❌ |
-| Actually rates skill quality | ✅ | ❌ | ❌ | ❌ |
-| Hierarchical skill organization | ✅ | ❌ | ❌ | ❌ |
-| Tries to improve skills over time | ✅ | ❌ | ❌ | ❌ |
-| Role-based agents | ✅ | ✅ | ✅ | ✅ |
-| Tools work | ✅ | ✅ | ✅ | ✅ |
+```
+EVOSKILL/
+├── skill.yaml                    # Skill definition (for agents)
+└── evoskill/
+    ├── __init__.py
+    └── modules/
+        ├── evolution_engine.py   # Main skill entry point
+        ├── skill_bank.py         # Hierarchical skill storage
+        ├── trueskill_rater.py    # Quality rating
+        ├── textgrad_engine.py    # Skill optimization
+        ├── discovery_module.py   # Solution discovery
+        ├── mission_controller.py # When to evolve
+        ├── skill_incubator.py    # Production skill generation
+        ├── speciation_evolution.py  # Genetic operators
+        └── evolution_memory.py   # Lifelong learning
+```
 
 ---
 
 <div align="center">
 
-## 🤝 Come mess around with it
-
-[![Discussions](https://img.shields.io/badge/Discussions-Join%20in-5865F2?style=flat-square)](https://github.com/badhope/EVOSKILL/discussions)
-
----
-
-**Made on weekends with too much coffee ☕**
+*It's skills all the way down.*
 
 </div>
-
----
----
-
-## 🇨🇳 中文
-
-<div align="center">
-
-### EVOSKILL - 一个会自己进化的技能框架
-
-</div>
-
-### 🤔 这是什么东西？
-
-LLM 解决问题很厉害，但它们**每次都在重新发明轮子**。
-
-EVOSKILL 是我的周末项目，试图解决这个问题：
-
-1. 🧪 AI 发现某种解法真的能用
-2. 📦 打包成可以重复使用的技能
-3. ⭐ 客观评估这个技能到底好不好（不只是"跑通了"）
-4. 📈 技能自己变得越来越好
-5. 🏛️ 真正好用的技能放在技能库里
-
-仅此而已，没什么革命性的东西。
-
----
-
-### 🔬 （非常）实验性的数据
-
-| 方法 | 成功率 | Token 消耗 |
-|------|-------|------------|
-| 原生 LLM | 68% | 1倍 |
-| 普通记忆 Agent | 82% | 3倍 |
-| EVOSKILL | 约90% | 1.2倍 |
-
-你的结果大概率会不一样。
-
----
-
-### 🚀 试试看
-
-```bash
-pip install evoskill
-```
-
-```python
-import asyncio
-from evoskill import EvolutionEngine
-
-async def main():
-    engine = EvolutionEngine()
-    
-    result = await engine.evolve(
-        "按拍摄日期批量重命名照片",
-        domain="文件管理"
-    )
-    
-    print(f"技能ID: {result['skill_id']}")
-    print(f"宣称成功率: {result['success_rate']:.1%}")
-    print(f"TrueSkill 评级: {result['rating']:.1f}")
-
-asyncio.run(main())
-```
-
-⚠️ **友情提示**：这是研究代码。它可能：
-- 完美工作
-- 给你 7 个都有点小问题的技能
-- 教自己学会拖延症
-
----
-
-**Made on weekends with too much coffee ☕**
