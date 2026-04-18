@@ -161,7 +161,7 @@ class TextGradEngine:
                 result.append(f"{function_indent}try:")
                 result.append(f"{function_indent}    ")
                 result.append(f"{function_indent}except Exception as e:")
-                result.append(f"{function_indent}    logger.error(f"Error: {{e}}")
+                result.append(f'{function_indent}    logger.error(f"Error: {{e}}")')
                 result.append(f"{function_indent}    raise")
         
         return '\n'.join(result)
@@ -195,3 +195,5 @@ class TextGradEngine:
             loss_history=loss_history,
             converged=len(loss_history) < self.max_iterations
         )
+
+

@@ -13,13 +13,13 @@ from typing import Dict, List, Optional, Any
 from dataclasses import dataclass, field, asdict
 from datetime import datetime
 
-from mission_controller import MissionController
-from discovery_module import DiscoveryModule
-from trueskill_rater import TrueSkillRater
-from skill_incubator import SkillIncubator
-from textgrad_optimizer import TextGradOptimizer
-from speciation_evolution import SpeciationEvolution
-from evolution_memory import EvolutionMemory
+from .mission_controller import MissionController
+from .discovery_module import DiscoveryModule
+from .trueskill_rater import TrueSkillRater
+from .skill_incubator import SkillIncubator
+from .textgrad_optimizer import TextGradOptimizer
+from .speciation_evolution import SpeciationEvolution
+from .evolution_memory import EvolutionMemory
 
 
 @dataclass

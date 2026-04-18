@@ -243,3 +243,5 @@ class SpeciationEvolution:
     def get_fitness_trend(self) -> List[Dict]:
         """获取适应度趋势"""
         return self.population.get("best_fitness_history", [])
+
+

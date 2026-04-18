@@ -141,3 +141,5 @@ class SkillBank:
             self.domain_skills = {d: {k: Skill(**v) for k, v in s.items()} 
                                 for d, s in data.get("domain_skills", {}).items()}
             self.task_skills = {k: Skill(**v) for k, v in data.get("task_skills", {}).items()}
+
+

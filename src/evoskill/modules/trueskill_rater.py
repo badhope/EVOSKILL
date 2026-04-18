@@ -269,3 +269,5 @@ class TrueSkillRater:
             del self.ratings[name]
         self._save_ratings()
         return len(to_remove)
+
+
