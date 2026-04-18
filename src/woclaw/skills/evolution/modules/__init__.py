@@ -1,26 +1,36 @@
 """
-🧬 Evolution Engine Modules
-AI进化引擎核心模块
+🧬 EVOSKILL - Autonomous AI Skill Evolution Framework
+
+Core Modules:
+- evolution_engine: Main evolution pipeline
+- mission_controller: Task analysis and triggering
+- discovery_module: Solution approach generation
+- trueskill_rater: Bayesian skill quality rating
+- skill_incubator: Production skill generation
+- textgrad_engine: Natural gradient optimization
+- skill_bank: Hierarchical 3-level skill library (SkillRL)
+- speciation_evolution: Darwinian genetic operators
+- evolution_memory: Lifelong learning persistence
 """
 
-from .mission_controller import MissionController
+from .evolution_engine import EvolutionEngine
+from .skill_bank import SkillBank, Skill
+from .textgrad_engine import TextGradEngine
+from .trueskill_rater import TrueSkillRater
 from .discovery_module import DiscoveryModule
-from .trueskill_rater import TrueSkillRater, SkillRating
+from .mission_controller import MissionController
 from .skill_incubator import SkillIncubator
-from .textgrad_optimizer import TextGradOptimizer
-from .speciation_evolution import SpeciationEvolution
-from .evolution_memory import EvolutionMemory
-from .evolution_engine import EvolutionEngine, EvolutionContext
 
 __all__ = [
     "EvolutionEngine",
-    "EvolutionContext",
-    "MissionController",
-    "DiscoveryModule",
+    "SkillBank",
+    "Skill",
+    "TextGradEngine",
     "TrueSkillRater",
-    "SkillRating",
+    "DiscoveryModule",
+    "MissionController",
     "SkillIncubator",
-    "TextGradOptimizer",
-    "SpeciationEvolution",
-    "EvolutionMemory"
 ]
+
+__version__ = "1.0.0"
+__author__ = "EVOSKILL AI Research Team"

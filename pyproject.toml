@@ -3,28 +3,31 @@ requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "woclaw-evolution"
+name = "evoskill"
 version = "1.0.0"
-description = "🧬 AI Evolution Engine - Autonomous Self-Improving Skill System"
+description = "🧬 EVOSKILL - Autonomous AI Skill Evolution Framework"
 description-long = """
-Woclaw Evolution is a revolutionary AI framework that enables Large Language Models
-to autonomously discover, validate, incubate, and evolve their own skills.
-Unlike traditional approaches that modify model weights, Evolution achieves
-recursive self-improvement through skill creation - no retraining required.
+EVOSKILL is the world's first open-source framework enabling Large Language Models
+to achieve recursive self-improvement without weight updates. Built on SkillRL,
+TextGrad, and TrueSkill research, EVOSKILL enables AI to autonomously discover,
+validate, incubate, and evolve production-ready skills - no retraining required.
+
+This is Darwinian evolution for AI.
 """
 readme = "README.md"
 license = {text = "MIT"}
 authors = [
-    {name = "Woclab AI Research", email = "research@woclab.ai"}
+    {name = "EVOSKILL AI Research", email = "research@evoskill.ai"}
 ]
 maintainers = [
-    {name = "Evolution Engine Team"}
+    {name = "EVOSKILL Core Team"}
 ]
 keywords = [
     "ai", "agi", "evolution", "self-improvement", "recursive",
     "skill-learning", "autonomous-agents", "llm", "trueskill",
     "textgrad", "darwinian", "speciation", "meta-learning",
-    "skill-incubator", "agent-evolution",
+    "skill-incubator", "agent-evolution", "skillrl",
+    "skill-bank", "skill-library", "auto-evolution",
 ]
 classifiers = [
     "Development Status :: 4 - Beta",
@@ -118,15 +121,18 @@ local = dependencies-local
 browser = dependencies-browser
 all = dependencies-all
 dev = dependencies-dev
+[project.scripts]
+evoskill = "evoskill.cli:main"
 
 [project.urls]
-Homepage = "https://github.com/badhope/Woclaw"
-Repository = "https://github.com/badhope/Woclaw.git"
-Documentation = "https://github.com/badhope/Woclaw/wiki"
-Bug Tracker = "https://github.com/badhope/Woclaw/issues"
-Discussions = "https://github.com/badhope/Woclaw/discussions"
-Changelog = "https://github.com/badhope/Woclaw/releases"
-Research = "https://github.com/badhope/Woclaw/wiki/Research"
+Homepage = "https://github.com/badhope/EVOSKILL"
+Repository = "https://github.com/badhope/EVOSKILL.git"
+Documentation = "https://github.com/badhope/EVOSKILL/wiki"
+Bug Tracker = "https://github.com/badhope/EVOSKILL/issues"
+Discussions = "https://github.com/badhope/EVOSKILL/discussions"
+Changelog = "https://github.com/badhope/EVOSKILL/releases"
+Research = "https://github.com/badhope/EVOSKILL/wiki/Research"
+Paper = "https://github.com/badhope/EVOSKILL/blob/main/WHITEPAPER.md"
 
 [tool.setuptools]
 packages = ["woclaw", "woclaw.skills", "woclaw.skills.evolution", "woclaw.skills.evolution.modules"]
