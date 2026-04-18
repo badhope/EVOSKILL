@@ -15,6 +15,8 @@
 [![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)](LICENSE)
 [![Stars](https://img.shields.io/github/stars/badhope/EVOSKILL?style=flat-square&color=gold)](https://github.com/badhope/EVOSKILL/stargazers)
 
+[**🇨🇳 中文版本**](README_CN.md)
+
 ---
 
 </div>
