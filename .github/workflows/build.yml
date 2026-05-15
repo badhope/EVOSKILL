@@ -24,22 +24,34 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
       
-      - name: Generate Gradle Wrapper
+      - name: Setup Gradle Wrapper
         run: |
-          if [ ! -f "gradle/wrapper/gradle-wrapper.jar" ] || [ $(stat -c%s "gradle/wrapper/gradle-wrapper.jar" 2>/dev/null || echo 0) -lt 50000 ]; then
-            echo "Generating Gradle Wrapper..."
+          # Download Gradle distribution and extract wrapper jar
+          GRADLE_VERSION="8.4"
+          WRAPPER_JAR="gradle/wrapper/gradle-wrapper.jar"
+          
+          if [ ! -f "$WRAPPER_JAR" ] || [ $(stat -c%s "$WRAPPER_JAR" 2>/dev/null || echo 0) -lt 50000 ]; then
+            echo "Downloading Gradle $GRADLE_VERSION to extract wrapper..."
             mkdir -p gradle/wrapper
-            curl -L -o gradle-wrapper.jar "https://github.com/nickmcdonnell/gradle-wrapper-jar/releases/download/v8.4/gradle-wrapper.jar" || \
-            curl -L -o gradle-wrapper.jar "https://github.com/nickmcdonnell/gradle-wrapper-jar/raw/main/gradle-wrapper.jar" || \
-            wget -O gradle-wrapper.jar "https://github.com/nickmcdonnell/gradle-wrapper-jar/releases/download/v8.4/gradle-wrapper.jar"
-            mv gradle-wrapper.jar gradle/wrapper/gradle-wrapper.jar
+            
+            # Download Gradle distribution
+            curl -fSL "https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip" -o gradle.zip
+            
+            # Extract wrapper jar from distribution
+            unzip -p gradle.zip "gradle-${GRADLE_VERSION}/lib/plugins/gradle-wrapper-${GRADLE_VERSION}.jar" > "$WRAPPER_JAR"
+            
+            # Verify
+            if [ $(stat -c%s "$WRAPPER_JAR") -lt 50000 ]; then
+              echo "Failed to extract wrapper jar, trying alternative method..."
+              # Alternative: use gradle wrapper from a known working project
+              curl -fSL "https://raw.githubusercontent.com/nickmcdonnell/gradle-wrapper-jar/main/gradle-wrapper.jar" -o "$WRAPPER_JAR"
+            fi
+            
+            rm -f gradle.zip
           fi
+          
+          echo "Wrapper jar size: $(stat -c%s $WRAPPER_JAR) bytes"
           chmod +x gradlew
-      
-      - name: Verify Gradle Wrapper
-        run: |
-          ls -la gradle/wrapper/
-          file gradle/wrapper/gradle-wrapper.jar
       
       - name: Build Debug APK
         run: ./gradlew assembleDebug --no-daemon --stacktrace
