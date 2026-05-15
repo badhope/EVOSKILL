@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banana Toolbox - UI 完整预览</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f0f0f0; padding: 20px; }
+        .container { max-width: 1400px; margin: 0 auto; }
+        h1 { text-align: center; color: #333; margin-bottom: 10px; }
+        .subtitle { text-align: center; color: #888; margin-bottom: 30px; }
+        .phones-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 30px; margin-bottom: 40px; }
+        .phone-wrapper { text-align: center; }
+        .phone-label { font-size: 16px; color: #555; margin-bottom: 10px; font-weight: 600; }
+        .phone-frame { width: 340px; height: 720px; background: #fff; border-radius: 36px; box-shadow: 0 15px 50px rgba(0,0,0,0.25); overflow: hidden; position: relative; border: 10px solid #1a1a1a; }
+        .screen { width: 100%; height: 100%; overflow-y: auto; background: #FAFAFA; }
+        .screen::-webkit-scrollbar { width: 0; }
+        .status-bar { height: 36px; background: #4CAF50; display: flex; align-items: center; justify-content: space-between; padding: 0 16px; color: white; font-size: 12px; font-weight: 600; flex-shrink: 0; }
+        .app-bar { background: #4CAF50; color: white; padding: 12px 16px; display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+        .app-bar h3 { flex: 1; font-size: 16px; }
+        .app-bar span { cursor: pointer; }
+        .home-header { background: linear-gradient(135deg, #4CAF50 0%, #81C784 100%); padding: 24px 16px 36px; color: white; }
+        .home-header h2 { font-size: 24px; margin-bottom: 4px; }
+        .home-header p { opacity: 0.9; font-size: 13px; }
+        .modules-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 16px; margin-top: -16px; }
+        .module-card { background: white; border-radius: 14px; padding: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); cursor: pointer; transition: transform 0.2s; }
+        .module-card:hover { transform: translateY(-2px); }
+        .module-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; margin-bottom: 10px; }
+        .module-card h3 { font-size: 14px; color: #333; margin-bottom: 2px; }
+        .module-card p { font-size: 11px; color: #999; }
+        .path-bar { background: #f5f5f5; padding: 8px 16px; font-size: 12px; color: #666; border-bottom: 1px solid #eee; flex-shrink: 0; }
+        .file-list { background: white; }
+        .file-item { display: flex; align-items: center; padding: 12px 16px; border-bottom: 1px solid #f5f5f5; }
+        .file-icon { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; margin-right: 12px; flex-shrink: 0; }
+        .file-info { flex: 1; min-width: 0; }
+        .file-name { font-size: 14px; color: #333; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .file-meta { font-size: 11px; color: #999; }
+        .tab-bar { display: flex; background: white; border-bottom: 2px solid #eee; flex-shrink: 0; }
+        .tab { flex: 1; text-align: center; padding: 10px 0; font-size: 13px; color: #999; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; }
+        .tab.active { color: #4CAF50; border-bottom-color: #4CAF50; font-weight: 600; }
+        .stat-bar { display: flex; justify-content: space-around; padding: 10px 16px; background: #f5f5f5; flex-shrink: 0; }
+        .stat-item { text-align: center; }
+        .stat-val { font-size: 14px; color: #4CAF50; font-weight: 600; }
+        .stat-label { font-size: 10px; color: #999; }
+        .app-item { display: flex; align-items: center; padding: 10px 16px; border-bottom: 1px solid #f5f5f5; }
+        .app-icon { width: 40px; height: 40px; border-radius: 10px; background: #E8F5E9; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; color: #4CAF50; margin-right: 12px; flex-shrink: 0; }
+        .app-info { flex: 1; min-width: 0; }
+        .app-name { font-size: 14px; color: #333; }
+        .app-meta { font-size: 11px; color: #999; }
+        .app-tag { font-size: 10px; background: #FFF3E0; color: #E65100; padding: 2px 6px; border-radius: 4px; margin-left: 8px; }
+        .net-status { background: white; margin: 12px; border-radius: 12px; padding: 16px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+        .net-status h4 { font-size: 14px; margin-bottom: 12px; }
+        .net-row { display: flex; justify-content: space-around; margin-bottom: 10px; }
+        .net-item { text-align: center; }
+        .net-item .icon { font-size: 18px; margin-bottom: 2px; }
+        .net-item .val { font-size: 12px; color: #333; }
+        .net-item .lbl { font-size: 10px; color: #999; }
+        .net-card { background: white; margin: 0 12px 10px; border-radius: 12px; padding: 14px; display: flex; align-items: center; box-shadow: 0 1px 4px rgba(0,0,0,0.06); cursor: pointer; }
+        .net-card .nc-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; margin-right: 12px; }
+        .net-card h4 { font-size: 14px; color: #333; }
+        .net-card p { font-size: 11px; color: #999; }
+        .tools-section { padding: 12px 16px 4px; }
+        .tools-section h4 { font-size: 14px; color: #333; margin-bottom: 10px; }
+        .tools-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+        .tool-item { display: flex; flex-direction: column; align-items: center; gap: 6px; cursor: pointer; }
+        .tool-icon { width: 48px; height: 48px; background: #f0f0f0; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 24px; }
+        .tool-name { font-size: 11px; color: #666; }
+        .bottom-nav { position: absolute; bottom: 0; left: 0; right: 0; height: 64px; background: white; border-top: 1px solid #eee; display: flex; justify-content: space-around; align-items: center; padding-bottom: 12px; flex-shrink: 0; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 2px; color: #999; font-size: 10px; }
+        .nav-item.active { color: #4CAF50; }
+        .nav-item span:first-child { font-size: 20px; }
+        .fab { position: absolute; bottom: 76px; right: 16px; width: 48px; height: 48px; background: #4CAF50; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 22px; color: white; box-shadow: 0 4px 12px rgba(76,175,80,0.4); cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🍌 Banana Toolbox - UI 完整预览</h1>
+        <p class="subtitle">5 个核心页面 · Material Design 3 · Kotlin + Jetpack Compose</p>
+        
+        <div class="phones-row">
+            <!-- 1. 首页 -->
+            <div class="phone-wrapper">
+                <div class="phone-label">① 首页</div>
+                <div class="phone-frame">
+                    <div class="screen">
+                        <div class="status-bar"><span>9:41</span><span>📶 🔋 87%</span></div>
+                        <div class="home-header">
+                            <h2>Banana Toolbox</h2>
+                            <p>全能工具箱 · 5 大模块</p>
+                        </div>
+                        <div class="modules-grid">
+                            <div class="module-card">
+                                <div class="module-icon" style="background:#E3F2FD">📁</div>
+                                <h3>文件管理</h3>
+                                <p>浏览、管理手机文件</p>
+                            </div>
+                            <div class="module-card">
+                                <div class="module-icon" style="background:#F3E5F5">📱</div>
+                                <h3>应用管理</h3>
+                                <p>卸载、备份应用</p>
+                            </div>
+                            <div class="module-card">
+                                <div class="module-icon" style="background:#E8F5E9">🌐</div>
+                                <h3>网络工具</h3>
+                                <p>测速、诊断网络</p>
+                            </div>
+                            <div class="module-card">
+                                <div class="module-icon" style="background:#FFF3E0">🔧</div>
+                                <h3>实用工具</h3>
+                                <p>二维码、换算等</p>
+                            </div>
+                        </div>
+                        <div style="padding:16px">
+                            <div style="font-size:13px;color:#666;margin-bottom:8px">最近使用</div>
+                            <div style="background:white;border-radius:10px;padding:12px;box-shadow:0 1px 4px rgba(0,0,0,0.06);margin-bottom:8px;display:flex;align-items:center;gap:10px">
+                                <span style="font-size:20px">📄</span>
+                                <div><div style="font-size:13px">report.pdf</div><div style="font-size:11px;color:#999">2.3 MB · 5分钟前</div></div>
+                            </div>
+                            <div style="background:white;border-radius:10px;padding:12px;box-shadow:0 1px 4px rgba(0,0,0,0.06);margin-bottom:8px;display:flex;align-items:center;gap:10px">
+                                <span style="font-size:20px">📦</span>
+                                <div><div style="font-size:13px">backup.zip</div><div style="font-size:11px;color:#999">120 MB · 1小时前</div></div>
+                            </div>
+                            <div style="background:white;border-radius:10px;padding:12px;box-shadow:0 1px 4px rgba(0,0,0,0.06);display:flex;align-items:center;gap:10px">
+                                <span style="font-size:20px">🔲</span>
+                                <div><div style="font-size:13px">二维码工具</div><div style="font-size:11px;color:#999">昨天</div></div>
+                            </div>
+                        </div>
+                        <div class="bottom-nav">
+                            <div class="nav-item active"><span>🏠</span><span>首页</span></div>
+                            <div class="nav-item"><span>📁</span><span>文件</span></div>
+                            <div class="nav-item"><span>📱</span><span>应用</span></div>
+                            <div class="nav-item"><span>🌐</span><span>网络</span></div>
+                            <div class="nav-item"><span>🔧</span><span>工具</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. 文件管理 -->
+            <div class="phone-wrapper">
+                <div class="phone-label">② 文件管理</div>
+                <div class="phone-frame">
+                    <div class="screen">
+                        <div class="status-bar"><span>9:41</span><span>📶 🔋 87%</span></div>
+                        <div class="app-bar">
+                            <span>←</span><h3>文件管理</h3>
+                            <span>🔍</span><span>↕️</span><span>⋮</span>
+                        </div>
+                        <div class="path-bar">🏠 /sdcard > Download</div>
+                        <div class="file-list">
+                            <div class="file-item"><div class="file-icon" style="background:#E3F2FD">📁</div><div class="file-info"><div class="file-name">DCIM</div><div class="file-meta">文件夹 · 2.1 GB</div></div><span style="color:#ccc">›</span></div>
+                            <div class="file-item"><div class="file-icon" style="background:#E3F2FD">📁</div><div class="file-info"><div class="file-name">Download</div><div class="file-meta">文件夹 · 856 MB</div></div><span style="color:#ccc">›</span></div>
+                            <div class="file-item"><div class="file-icon" style="background:#E3F2FD">📁</div><div class="file-info"><div class="file-name">Documents</div><div class="file-meta">文件夹 · 234 MB</div></div><span style="color:#ccc">›</span></div>
+                            <div class="file-item"><div class="file-icon" style="background:#E3F2FD">📁</div><div class="file-info"><div class="file-name">Music</div><div class="file-meta">文件夹 · 1.2 GB</div></div><span style="color:#ccc">›</span></div>
+                            <div class="file-item"><div class="file-icon" style="background:#FCE4EC">🖼️</div><div class="file-info"><div class="file-name">photo.jpg</div><div class="file-meta">1.5 MB · 今天 14:30</div></div></div>
+                            <div class="file-item"><div class="file-icon" style="background:#F3E5F5">🎵</div><div class="file-info"><div class="file-name">music.mp3</div><div class="file-meta">4.2 MB · 昨天</div></div></div>
+                            <div class="file-item"><div class="file-icon" style="background:#E8EAF6">📄</div><div class="file-info"><div class="file-name">report.pdf</div><div class="file-meta">2.3 MB · 01/15</div></div></div>
+                            <div class="file-item"><div class="file-icon" style="background:#FFF3E0">📦</div><div class="file-info"><div class="file-name">backup.zip</div><div class="file-meta">120 MB · 01/10</div></div></div>
+                            <div class="file-item"><div class="file-icon" style="background:#E8F5E9">🤖</div><div class="file-info"><div class="file-name">toolbox.apk</div><div class="file-meta">50 MB · 01/08</div></div></div>
+                            <div class="file-item"><div class="file-icon" style="background:#FCE4EC">🎬</div><div class="file-info"><div class="file-name">video.mp4</div><div class="file-meta">100 MB · 01/05</div></div></div>
+                        </div>
+                        <div class="fab">+</div>
+                        <div class="bottom-nav">
+                            <div class="nav-item"><span>🏠</span><span>首页</span></div>
+                            <div class="nav-item active"><span>📁</span><span>文件</span></div>
+                            <div class="nav-item"><span>📱</span><span>应用</span></div>
+                            <div class="nav-item"><span>🌐</span><span>网络</span></div>
+                            <div class="nav-item"><span>🔧</span><span>工具</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. 应用管理 -->
+            <div class="phone-wrapper">
+                <div class="phone-label">③ 应用管理</div>
+                <div class="phone-frame">
+                    <div class="screen">
+                        <div class="status-bar"><span>9:41</span><span>📶 🔋 87%</span></div>
+                        <div class="app-bar">
+                            <span>←</span><h3>应用管理</h3>
+                            <span>🔍</span>
+                        </div>
+                        <div class="tab-bar">
+                            <div class="tab active">全部</div>
+                            <div class="tab">用户应用</div>
+                            <div class="tab">系统应用</div>
+                        </div>
+                        <div class="stat-bar">
+                            <div class="stat-item"><div class="stat-val">45</div><div class="stat-label">已安装</div></div>
+                            <div class="stat-item"><div class="stat-val">32</div><div class="stat-label">用户应用</div></div>
+                            <div class="stat-item"><div class="stat-val">13</div><div class="stat-label">系统应用</div></div>
+                            <div class="stat-item"><div class="stat-val">3.2G</div><div class="stat-label">总大小</div></div>
+                        </div>
+                        <div class="app-item"><div class="app-icon">微</div><div class="app-info"><div class="app-name">微信 <span class="app-tag">用户</span></div><div class="app-meta">v8.0.33 · 256 MB</div></div></div>
+                        <div class="app-item"><div class="app-icon">支</div><div class="app-info"><div class="app-name">支付宝 <span class="app-tag">用户</span></div><div class="app-meta">v10.3.50 · 198 MB</div></div></div>
+                        <div class="app-item"><div class="app-icon">Q</div><div class="app-info"><div class="app-name">QQ <span class="app-tag">用户</span></div><div class="app-meta">v9.0.20 · 300 MB</div></div></div>
+                        <div class="app-item"><div class="app-icon" style="background:#E3F2FD;color:#1976D2">C</div><div class="app-info"><div class="app-name">Chrome <span class="app-tag" style="background:#E8F5E9;color:#2E7D32">系统</span></div><div class="app-meta">v120.0 · 100 MB</div></div></div>
+                        <div class="app-item"><div class="app-icon" style="background:#E3F2FD;color:#1976D2">⚙</div><div class="app-info"><div class="app-name">设置 <span class="app-tag" style="background:#E8F5E9;color:#2E7D32">系统</span></div><div class="app-meta">v14 · 15 MB</div></div></div>
+                        <div class="app-item"><div class="app-icon">B</div><div class="app-info"><div class="app-name">哔哩哔哩 <span class="app-tag">用户</span></div><div class="app-meta">v7.50.0 · 180 MB</div></div></div>
+                        <div class="app-item"><div class="app-icon">抖</div><div class="app-info"><div class="app-name">抖音 <span class="app-tag">用户</span></div><div class="app-meta">v29.0.0 · 200 MB</div></div></div>
+                        <div class="app-item"><div class="app-icon">网易云</div><div class="app-info"><div class="app-name">网易云音乐 <span class="app-tag">用户</span></div><div class="app-meta">v8.10.0 · 100 MB</div></div></div>
+                        <div class="bottom-nav">
+                            <div class="nav-item"><span>🏠</span><span>首页</span></div>
+                            <div class="nav-item"><span>📁</span><span>文件</span></div>
+                            <div class="nav-item active"><span>📱</span><span>应用</span></div>
+                            <div class="nav-item"><span>🌐</span><span>网络</span></div>
+                            <div class="nav-item"><span>🔧</span><span>工具</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. 网络工具 -->
+            <div class="phone-wrapper">
+                <div class="phone-label">④ 网络工具</div>
+                <div class="phone-frame">
+                    <div class="screen">
+                        <div class="status-bar"><span>9:41</span><span>📶 🔋 87%</span></div>
+                        <div class="app-bar">
+                            <span>←</span><h3>网络工具</h3>
+                        </div>
+                        <div class="net-status">
+                            <h4>当前网络状态</h4>
+                            <div class="net-row">
+                                <div class="net-item"><div class="icon">📶</div><div class="val">WiFi</div><div class="lbl">已连接</div></div>
+                                <div class="net-item"><div class="icon">🌐</div><div class="val">192.168.1.100</div><div class="lbl">IP 地址</div></div>
+                                <div class="net-item"><div class="icon">⚡</div><div class="val">867 Mbps</div><div class="lbl">连接速度</div></div>
+                            </div>
+                            <div style="height:1px;background:#eee;margin:8px 0"></div>
+                            <div class="net-row">
+                                <div class="net-item"><div class="icon">📡</div><div class="val">192.168.1.1</div><div class="lbl">网关</div></div>
+                                <div class="net-item"><div class="icon">🔍</div><div class="val">8.8.8.8</div><div class="lbl">DNS</div></div>
+                                <div class="net-item"><div class="icon">⏱</div><div class="val">12 ms</div><div class="lbl">延迟</div></div>
+                            </div>
+                        </div>
+                        <div class="net-card"><div class="nc-icon" style="background:#E3F2FD">⚡</div><div style="flex:1"><h4>网速测试</h4><p>测量下载/上传速度</p></div><span style="color:#ccc">›</span></div>
+                        <div class="net-card"><div class="nc-icon" style="background:#E8F5E9">📡</div><div style="flex:1"><h4>网络诊断</h4><p>Ping / TraceRoute / DNS</p></div><span style="color:#ccc">›</span></div>
+                        <div class="net-card"><div class="nc-icon" style="background:#FFF3E0">🌐</div><div style="flex:1"><h4>局域网扫描</h4><p>发现同一网络下的设备</p></div><span style="color:#ccc">›</span></div>
+                        <div class="net-card"><div class="nc-icon" style="background:#FCE4EC">🔌</div><div style="flex:1"><h4>端口扫描</h4><p>检测目标主机开放端口</p></div><span style="color:#ccc">›</span></div>
+                        <div class="net-card"><div class="nc-icon" style="background:#F3E5F5">🔎</div><div style="flex:1"><h4>Whois 查询</h4><p>查询域名注册信息</p></div><span style="color:#ccc">›</span></div>
+                        <div class="bottom-nav">
+                            <div class="nav-item"><span>🏠</span><span>首页</span></div>
+                            <div class="nav-item"><span>📁</span><span>文件</span></div>
+                            <div class="nav-item"><span>📱</span><span>应用</span></div>
+                            <div class="nav-item active"><span>🌐</span><span>网络</span></div>
+                            <div class="nav-item"><span>🔧</span><span>工具</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5. 实用工具 -->
+            <div class="phone-wrapper">
+                <div class="phone-label">⑤ 实用工具</div>
+                <div class="phone-frame">
+                    <div class="screen">
+                        <div class="status-bar"><span>9:41</span><span>📶 🔋 87%</span></div>
+                        <div class="app-bar">
+                            <span>←</span><h3>实用工具</h3>
+                            <span>🔍</span>
+                        </div>
+                        <div class="tools-section">
+                            <h4>常用工具</h4>
+                            <div class="tools-grid">
+                                <div class="tool-item"><div class="tool-icon">📐</div><span class="tool-name">单位换算</span></div>
+                                <div class="tool-item"><div class="tool-icon">🎨</div><span class="tool-name">颜色取值</span></div>
+                                <div class="tool-item"><div class="tool-icon">📱</div><span class="tool-name">设备信息</span></div>
+                                <div class="tool-item"><div class="tool-icon">🔤</div><span class="tool-name">文本处理</span></div>
+                            </div>
+                        </div>
+                        <div style="height:1px;background:#eee;margin:8px 16px"></div>
+                        <div class="tools-section">
+                            <h4>更多工具</h4>
+                            <div class="tools-grid">
+                                <div class="tool-item"><div class="tool-icon">🔲</div><span class="tool-name">二维码</span></div>
+                                <div class="tool-item"><div class="tool-icon">📷</div><span class="tool-name">图片处理</span></div>
+                                <div class="tool-item"><div class="tool-icon">📋</div><span class="tool-name">剪贴板</span></div>
+                                <div class="tool-item"><div class="tool-icon">🔢</div><span class="tool-name">计算器</span></div>
+                            </div>
+                        </div>
+                        <div style="height:1px;background:#eee;margin:8px 16px"></div>
+                        <div class="tools-section">
+                            <h4>开发工具</h4>
+                            <div class="tools-grid">
+                                <div class="tool-item"><div class="tool-icon">💻</div><span class="tool-name">JSON格式化</span></div>
+                                <div class="tool-item"><div class="tool-icon">🔑</div><span class="tool-name">Hash计算</span></div>
+                                <div class="tool-item"><div class="tool-icon">🌐</div><span class="tool-name">编码转换</span></div>
+                                <div class="tool-item"><div class="tool-icon">⏰</div><span class="tool-name">时间戳</span></div>
+                            </div>
+                        </div>
+                        <div class="bottom-nav">
+                            <div class="nav-item"><span>🏠</span><span>首页</span></div>
+                            <div class="nav-item"><span>📁</span><span>文件</span></div>
+                            <div class="nav-item"><span>📱</span><span>应用</span></div>
+                            <div class="nav-item"><span>🌐</span><span>网络</span></div>
+                            <div class="nav-item active"><span>🔧</span><span>工具</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

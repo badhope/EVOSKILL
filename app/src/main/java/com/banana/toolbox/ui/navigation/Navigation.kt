@@ -9,7 +9,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.banana.toolbox.ui.screens.appmanager.AppManagerScreen
+import com.banana.toolbox.ui.screens.filemanager.FileManagerScreen
 import com.banana.toolbox.ui.screens.home.HomeScreen
+import com.banana.toolbox.ui.screens.network.NetworkToolsScreen
+import com.banana.toolbox.ui.screens.tools.UtilityToolsScreen
 
 /**
  * 主导航图
@@ -37,20 +41,24 @@ fun BananaNavigation(
                 )
             }
             composable(Screen.FileManager.route) {
-                // TODO: 文件管理页面
-                PlaceholderScreen("文件管理")
+                FileManagerScreen(
+                    onNavigateBack = { navController.popBackStack() }
+                )
             }
             composable(Screen.AppManager.route) {
-                // TODO: 应用管理页面
-                PlaceholderScreen("应用管理")
+                AppManagerScreen(
+                    onNavigateBack = { navController.popBackStack() }
+                )
             }
             composable(Screen.NetworkTools.route) {
-                // TODO: 网络工具页面
-                PlaceholderScreen("网络工具")
+                NetworkToolsScreen(
+                    onNavigateBack = { navController.popBackStack() }
+                )
             }
             composable(Screen.UtilityTools.route) {
-                // TODO: 实用工具页面
-                PlaceholderScreen("实用工具")
+                UtilityToolsScreen(
+                    onNavigateBack = { navController.popBackStack() }
+                )
             }
         }
     }
@@ -111,17 +119,4 @@ fun getIconForName(name: String) = when (name) {
     "wifi" -> androidx.compose.material.icons.Icons.Default.Wifi
     "build" -> androidx.compose.material.icons.Icons.Default.Build
     else -> androidx.compose.material.icons.Icons.Default.Info
-}
-
-@Composable
-fun PlaceholderScreen(title: String) {
-    Box(
-        modifier = Modifier.fillMaxSize()
-    ) {
-        Text(
-            text = title,
-            style = MaterialTheme.typography.headlineMedium,
-            modifier = Modifier.align(androidx.compose.ui.Alignment.Center)
-        )
-    }
 }
