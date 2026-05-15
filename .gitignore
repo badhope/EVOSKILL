@@ -1,52 +1,70 @@
-# Byte-compiled / optimized / DLL files
-__pycache__/
-*.py[cod]
-*$py.class
+# Android
+*.iml
+.gradle
+/local.properties
+/.idea/
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.cxx
+local.properties
 
-# Virtual environments
-venv/
-env/
-.venv/
-env/
+# Android build outputs
+**/build/
+*.apk
+*.ap_
+*.aab
 
-# IDE
+# Kotlin
+*.class
+
+# Java
+*.jar
+*.war
+*.ear
+
+# NDK
+obj/
+.libs/
+
+# IntelliJ
+*.iml
 .idea/
+*.ipr
+*.iws
+out/
+
+# VS Code
 .vscode/
-*.swp
-*.swo
-*~
-
-# Distribution / packaging
-dist/
-build/
-*.egg-info/
-
-# Test coverage
-.coverage
-htmlcov/
-.pytest_cache/
 
 # OS files
 .DS_Store
 Thumbs.db
 desktop.ini
 
-# Project specific
-.woclaw/
-.learnings/
+# Secrets
+*.keystore
+*.jks
+secrets.properties
+
+# Test
+.coverage
+htmlcov/
+.pytest_cache/
+
+# Logs
 *.log
+logs/
+
+# Temp
+tmp/
+temp/
 *.tmp
-test_*.txt
+*.swp
+*.swo
+*~
 
 # Environments
 .env
 .env.local
-*.env
-
-# Logs
-logs/
-*.log
-
-# Temporary files
-tmp/
-temp/
