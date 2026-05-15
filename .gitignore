@@ -20,9 +20,10 @@ local.properties
 *.class
 
 # Java
-*.jar
 *.war
 *.ear
+# But keep gradle wrapper
+!gradle/wrapper/gradle-wrapper.jar
 
 # NDK
 obj/
