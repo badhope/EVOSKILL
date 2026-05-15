@@ -14,6 +14,11 @@ import com.banana.toolbox.ui.screens.filemanager.FileManagerScreen
 import com.banana.toolbox.ui.screens.home.HomeScreen
 import com.banana.toolbox.ui.screens.network.NetworkToolsScreen
 import com.banana.toolbox.ui.screens.tools.UtilityToolsScreen
+import com.banana.toolbox.ui.screens.tools.converter.FileConverterScreen
+import com.banana.toolbox.ui.screens.tools.crypto.CryptoScreen
+import com.banana.toolbox.ui.screens.tools.cleaner.CleanerScreen
+import com.banana.toolbox.ui.screens.tools.inspector.DeepInspectorScreen
+import com.banana.toolbox.ui.screens.tools.generator.GeneratorScreen
 
 /**
  * 主导航图
@@ -57,6 +62,37 @@ fun BananaNavigation(
             }
             composable(Screen.UtilityTools.route) {
                 UtilityToolsScreen(
+                    onNavigateBack = { navController.popBackStack() },
+                    onNavigateToConverter = { navController.navigate(Screen.FileConverter.route) },
+                    onNavigateToCrypto = { navController.navigate(Screen.Crypto.route) },
+                    onNavigateToCleaner = { navController.navigate(Screen.Cleaner.route) },
+                    onNavigateToInspector = { navController.navigate(Screen.DeepInspector.route) },
+                    onNavigateToGenerator = { navController.navigate(Screen.Generator.route) }
+                )
+            }
+            // 扩展工具页面
+            composable(Screen.FileConverter.route) {
+                FileConverterScreen(
+                    onNavigateBack = { navController.popBackStack() }
+                )
+            }
+            composable(Screen.Crypto.route) {
+                CryptoScreen(
+                    onNavigateBack = { navController.popBackStack() }
+                )
+            }
+            composable(Screen.Cleaner.route) {
+                CleanerScreen(
+                    onNavigateBack = { navController.popBackStack() }
+                )
+            }
+            composable(Screen.DeepInspector.route) {
+                DeepInspectorScreen(
+                    onNavigateBack = { navController.popBackStack() }
+                )
+            }
+            composable(Screen.Generator.route) {
+                GeneratorScreen(
                     onNavigateBack = { navController.popBackStack() }
                 )
             }
@@ -73,7 +109,7 @@ fun BananaBottomBar(
 ) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
-    
+
     val items = listOf(
         BottomNavItem(Screen.Home.route, "首页", "home"),
         BottomNavItem(Screen.FileManager.route, "文件", "folder"),
@@ -81,7 +117,7 @@ fun BananaBottomBar(
         BottomNavItem(Screen.NetworkTools.route, "网络", "wifi"),
         BottomNavItem(Screen.UtilityTools.route, "工具", "build")
     )
-    
+
     NavigationBar {
         items.forEach { item ->
             NavigationBarItem(
@@ -93,7 +129,7 @@ fun BananaBottomBar(
                         restoreState = true
                     }
                 },
-                icon = { 
+                icon = {
                     Icon(
                         imageVector = getIconForName(item.iconName),
                         contentDescription = item.label
