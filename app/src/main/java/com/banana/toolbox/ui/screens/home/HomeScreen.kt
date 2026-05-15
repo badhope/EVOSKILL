@@ -21,7 +21,8 @@ fun HomeScreen(
     onNavigateToFileManager: () -> Unit,
     onNavigateToAppManager: () -> Unit,
     onNavigateToNetwork: () -> Unit,
-    onNavigateToTools: () -> Unit
+    onNavigateToTools: () -> Unit,
+    onNavigateToGameCenter: () -> Unit = {}
 ) {
     Column(
         modifier = Modifier
@@ -34,23 +35,24 @@ fun HomeScreen(
             style = MaterialTheme.typography.headlineMedium,
             color = MaterialTheme.colorScheme.primary
         )
-        
+
         Text(
             text = "全能工具箱",
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
-        
+
         Spacer(modifier = Modifier.height(24.dp))
-        
+
         // 功能模块卡片
         val modules = listOf(
             ModuleItem("文件管理", "浏览、管理手机文件", Icons.Default.Folder, onNavigateToFileManager),
             ModuleItem("应用管理", "卸载、备份应用", Icons.Default.Apps, onNavigateToAppManager),
             ModuleItem("网络工具", "测速、诊断网络", Icons.Default.Wifi, onNavigateToNetwork),
-            ModuleItem("实用工具", "二维码、换算等", Icons.Default.Build, onNavigateToTools)
+            ModuleItem("实用工具", "二维码、换算等", Icons.Default.Build, onNavigateToTools),
+            ModuleItem("游戏中心", "加速、录屏、助手", Icons.Default.SportsEsports, onNavigateToGameCenter, true)
         )
-        
+
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
             horizontalArrangement = Arrangement.spacedBy(12.dp),
@@ -68,7 +70,8 @@ data class ModuleItem(
     val title: String,
     val description: String,
     val icon: ImageVector,
-    val onClick: () -> Unit
+    val onClick: () -> Unit,
+    val isNew: Boolean = false
 )
 
 @Composable
@@ -79,29 +82,44 @@ fun ModuleCard(module: ModuleItem) {
             .fillMaxWidth()
             .height(140.dp)
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp),
-            verticalArrangement = Arrangement.SpaceBetween
+        Box(
+            modifier = Modifier.fillMaxSize()
         ) {
-            Icon(
-                imageVector = module.icon,
-                contentDescription = module.title,
-                tint = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.size(36.dp)
-            )
-            
-            Column {
-                Text(
-                    text = module.title,
-                    style = MaterialTheme.typography.titleMedium
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp),
+                verticalArrangement = Arrangement.SpaceBetween
+            ) {
+                Icon(
+                    imageVector = module.icon,
+                    contentDescription = module.title,
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(36.dp)
                 )
-                Text(
-                    text = module.description,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
+
+                Column {
+                    Text(
+                        text = module.title,
+                        style = MaterialTheme.typography.titleMedium
+                    )
+                    Text(
+                        text = module.description,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            }
+
+            // New badge
+            if (module.isNew) {
+                Badge(
+                    modifier = Modifier
+                        .align(Alignment.TopEnd)
+                        .padding(8.dp)
+                ) {
+                    Text("NEW")
+                }
             }
         }
     }

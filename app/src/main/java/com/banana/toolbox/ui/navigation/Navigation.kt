@@ -19,6 +19,11 @@ import com.banana.toolbox.ui.screens.tools.crypto.CryptoScreen
 import com.banana.toolbox.ui.screens.tools.cleaner.CleanerScreen
 import com.banana.toolbox.ui.screens.tools.inspector.DeepInspectorScreen
 import com.banana.toolbox.ui.screens.tools.generator.GeneratorScreen
+import com.banana.toolbox.ui.screens.game.GameCenterScreen
+import com.banana.toolbox.ui.screens.game.GameLibraryScreen
+import com.banana.toolbox.ui.screens.game.GameBoosterScreen
+import com.banana.toolbox.ui.screens.game.GameRecorderScreen
+import com.banana.toolbox.ui.screens.game.GameAssistantScreen
 
 /**
  * 主导航图
@@ -42,7 +47,8 @@ fun BananaNavigation(
                     onNavigateToFileManager = { navController.navigate(Screen.FileManager.route) },
                     onNavigateToAppManager = { navController.navigate(Screen.AppManager.route) },
                     onNavigateToNetwork = { navController.navigate(Screen.NetworkTools.route) },
-                    onNavigateToTools = { navController.navigate(Screen.UtilityTools.route) }
+                    onNavigateToTools = { navController.navigate(Screen.UtilityTools.route) },
+                    onNavigateToGameCenter = { navController.navigate(Screen.GameCenter.route) }
                 )
             }
             composable(Screen.FileManager.route) {
@@ -96,6 +102,36 @@ fun BananaNavigation(
                     onNavigateBack = { navController.popBackStack() }
                 )
             }
+            // 游戏中心页面
+            composable(Screen.GameCenter.route) {
+                GameCenterScreen(
+                    onNavigateBack = { navController.popBackStack() },
+                    onNavigateToLibrary = { navController.navigate(Screen.GameLibrary.route) },
+                    onNavigateToBooster = { navController.navigate(Screen.GameBooster.route) },
+                    onNavigateToRecorder = { navController.navigate(Screen.GameRecorder.route) },
+                    onNavigateToAssistant = { navController.navigate(Screen.GameAssistant.route) }
+                )
+            }
+            composable(Screen.GameLibrary.route) {
+                GameLibraryScreen(
+                    onNavigateBack = { navController.popBackStack() }
+                )
+            }
+            composable(Screen.GameBooster.route) {
+                GameBoosterScreen(
+                    onNavigateBack = { navController.popBackStack() }
+                )
+            }
+            composable(Screen.GameRecorder.route) {
+                GameRecorderScreen(
+                    onNavigateBack = { navController.popBackStack() }
+                )
+            }
+            composable(Screen.GameAssistant.route) {
+                GameAssistantScreen(
+                    onNavigateBack = { navController.popBackStack() }
+                )
+            }
         }
     }
 }
@@ -115,7 +151,8 @@ fun BananaBottomBar(
         BottomNavItem(Screen.FileManager.route, "文件", "folder"),
         BottomNavItem(Screen.AppManager.route, "应用", "apps"),
         BottomNavItem(Screen.NetworkTools.route, "网络", "wifi"),
-        BottomNavItem(Screen.UtilityTools.route, "工具", "build")
+        BottomNavItem(Screen.UtilityTools.route, "工具", "build"),
+        BottomNavItem(Screen.GameCenter.route, "游戏", "sports_esports")
     )
 
     NavigationBar {
@@ -154,5 +191,6 @@ fun getIconForName(name: String) = when (name) {
     "apps" -> androidx.compose.material.icons.Icons.Default.Apps
     "wifi" -> androidx.compose.material.icons.Icons.Default.Wifi
     "build" -> androidx.compose.material.icons.Icons.Default.Build
+    "sports_esports" -> androidx.compose.material.icons.Icons.Default.Info
     else -> androidx.compose.material.icons.Icons.Default.Info
 }
