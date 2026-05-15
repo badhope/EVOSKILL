@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Banana shape -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M54,20c-15,0-27,8-27,20c0,15 12,28 27,28s27-13 27-28c0-12-12-20-27-20zM54,26c12,0 21,6 21,14c0,11-9,22-21,22s-21-11-21-22c0-8 9-14 21-14z"/>
+    <!-- Toolbox icon -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M40,50h28v4h-28zM44,58h20v12h-20z"/>
+</vector>
