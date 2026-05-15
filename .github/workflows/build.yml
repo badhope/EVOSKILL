@@ -20,19 +20,32 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-          cache: gradle
       
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
       
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
+      - name: Generate Gradle Wrapper
+        run: |
+          if [ ! -f "gradle/wrapper/gradle-wrapper.jar" ] || [ $(stat -c%s "gradle/wrapper/gradle-wrapper.jar" 2>/dev/null || echo 0) -lt 50000 ]; then
+            echo "Generating Gradle Wrapper..."
+            mkdir -p gradle/wrapper
+            curl -L -o gradle-wrapper.jar "https://github.com/nickmcdonnell/gradle-wrapper-jar/releases/download/v8.4/gradle-wrapper.jar" || \
+            curl -L -o gradle-wrapper.jar "https://github.com/nickmcdonnell/gradle-wrapper-jar/raw/main/gradle-wrapper.jar" || \
+            wget -O gradle-wrapper.jar "https://github.com/nickmcdonnell/gradle-wrapper-jar/releases/download/v8.4/gradle-wrapper.jar"
+            mv gradle-wrapper.jar gradle/wrapper/gradle-wrapper.jar
+          fi
+          chmod +x gradlew
+      
+      - name: Verify Gradle Wrapper
+        run: |
+          ls -la gradle/wrapper/
+          file gradle/wrapper/gradle-wrapper.jar
       
       - name: Build Debug APK
-        run: ./gradlew assembleDebug --no-daemon
+        run: ./gradlew assembleDebug --no-daemon --stacktrace
       
       - name: Build Release APK
-        run: ./gradlew assembleRelease --no-daemon
+        run: ./gradlew assembleRelease --no-daemon --stacktrace
       
       - name: Upload Debug APK
         uses: actions/upload-artifact@v4
