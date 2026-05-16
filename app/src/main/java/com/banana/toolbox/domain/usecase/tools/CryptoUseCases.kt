@@ -11,6 +11,7 @@ import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.SecretKeySpec
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.math.pow
 
 /**
  * 加密解密工具用例
@@ -365,7 +366,7 @@ enum class CryptoAlgorithm(val displayName: String, val keySize: Int) {
     AES_256("AES-256", 256)
 }
 
-enum class HashAlgorithm(val name: String) {
+enum class HashAlgorithm(override val name: String) {
     MD5("MD5"),
     SHA1("SHA-1"),
     SHA256("SHA-256"),

@@ -3,12 +3,14 @@ package com.banana.toolbox.domain.usecase.tools
 import android.app.ActivityManager
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.hardware.Sensor
 import android.hardware.SensorManager
 import android.net.wifi.WifiManager
+import android.os.BatteryManager
 import android.os.Build
 import android.os.Environment
 import android.os.StatFs

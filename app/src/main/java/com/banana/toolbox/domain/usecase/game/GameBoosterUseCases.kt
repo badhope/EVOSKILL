@@ -279,7 +279,7 @@ class GameBoosterUseCases @Inject constructor(
         // 实际实现需要通过系统API调整GPU频率
     }
 
-    private fun applyMemoryOptimization(level: MemoryLevel) {
+    private suspend fun applyMemoryOptimization(level: MemoryLevel) {
         when (level) {
             MemoryLevel.AGGRESSIVE -> {
                 activityManager.clearApplicationUserData()

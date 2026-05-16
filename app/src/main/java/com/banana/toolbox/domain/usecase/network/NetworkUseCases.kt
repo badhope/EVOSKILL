@@ -5,6 +5,8 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.net.wifi.WifiManager
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.withContext
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -240,30 +242,30 @@ class NetworkUseCases @Inject constructor() {
             ))
             
             // 并发扫描其他设备
-            val jobs = (1..254).map { i ->
-                val ip = "$subnet.$i"
-                async(Dispatchers.IO) {
-                    try {
-                        val address = InetAddress.getByName(ip)
-                        val reachable = address.isReachable(200)
-                        if (reachable) {
-                            DeviceInfo(
-                                ip = ip,
-                                mac = "Unknown",
-                                hostname = try { address.hostName } catch (e: Exception) { "Unknown" },
-                                isLocal = false,
-                                isReachable = true
-                            )
-                        } else null
-                    } catch (e: Exception) {
-                        null
+            val devicesFromScan = coroutineScope {
+                (1..254).map { i ->
+                    val ip = "$subnet.$i"
+                    async(Dispatchers.IO) {
+                        try {
+                            val address = InetAddress.getByName(ip)
+                            val reachable = address.isReachable(200)
+                            if (reachable) {
+                                DeviceInfo(
+                                    ip = ip,
+                                    mac = "Unknown",
+                                    hostname = try { address.hostName } catch (e: Exception) { "Unknown" },
+                                    isLocal = false,
+                                    isReachable = true
+                                )
+                            } else null
+                        } catch (e: Exception) {
+                            null
+                        }
                     }
-                }
+                }.awaitAll().filterNotNull()
             }
-            
-            jobs.forEach { job ->
-                job.await()?.let { devices.add(it) }
-            }
+
+            devicesFromScan.forEach { devices.add(it) }
             
             devices.sortedBy { it.ip }
         }
@@ -429,6 +431,3 @@ private val SERVICE_NAMES = mapOf(
     8443 to "HTTPS Alt"
 )
 
-private fun <T> async(block: () -> T): kotlinx.coroutines.Deferred<T> {
-    return kotlinx.coroutines.GlobalScope.async(kotlinx.coroutines.Dispatchers.IO) { block() }
-}

@@ -118,7 +118,7 @@ class FileUseCases @Inject constructor(
                 totalBytes = totalBytes,
                 usedBytes = usedBytes,
                 freeBytes = freeBytes,
-                usagePercent = if (totalBytes > 0) (usedBytes * 100 / totalBytes) else 0
+                usagePercent = if (totalBytes > 0) (usedBytes * 100 / totalBytes).toInt() else 0
             )
         }
     }
