@@ -199,7 +199,6 @@ fun GameLibraryScreen(
                 }
             }
         }
-    }
 
     // 游戏选项底部弹窗
     if (uiState.selectedGame != null) {
