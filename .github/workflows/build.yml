@@ -30,25 +30,28 @@ jobs:
           gradle-version: '8.4'
       
       - name: Build Debug APK
-        run: gradle assembleDebug --no-daemon --stacktrace --info 2>&1 | grep -E "error:|Error:|e:|Unresolved|Cannot|None of|Overload|Type mismatch|Incompatible|expect" | head -100
+        run: gradle assembleDebug --no-daemon --stacktrace 2>&1 | tee build_output.txt
       
-      - name: Build Release APK
-        run: gradle assembleRelease --no-daemon --stacktrace
+      - name: Show Build Errors
+        if: failure()
+        run: grep -E "e: file://|Unresolved|Cannot find|None of|Overload|Type mismatch|Incompatible|\.kt:" build_output.txt || echo "No specific errors found, showing last 50 lines:" && tail -50 build_output.txt
       
       - name: Upload Debug APK
+        if: success()
         uses: actions/upload-artifact@v4
         with:
           name: app-debug
           path: app/build/outputs/apk/debug/app-debug.apk
       
       - name: Upload Release APK
+        if: success()
         uses: actions/upload-artifact@v4
         with:
           name: app-release-unsigned
           path: app/build/outputs/apk/release/app-release.apk
       
       - name: Create Release
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        if: success() && github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: softprops/action-gh-release@v1
         with:
           tag_name: v1.0.${{ github.run_number }}
