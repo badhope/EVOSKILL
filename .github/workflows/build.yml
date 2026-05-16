@@ -2,9 +2,7 @@ name: Build APK
 
 on:
   push:
-    branches: [ main, master ]
-  pull_request:
-    branches: [ main, master ]
+    branches: [ main ]
   workflow_dispatch:
 
 jobs:
@@ -45,6 +43,14 @@ jobs:
         with:
           name: app-debug
           path: app/build/outputs/apk/debug/
+          retention-days: 90
+      
+      - name: Delete old draft releases
+        if: steps.build.outcome == 'success' && github.event_name == 'push' && github.ref == 'refs/heads/main'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release list --json tagName,isDraft -q '.[] | select(.isDraft==true) | .tagName' | xargs -I{} gh release delete {} --yes --cleanup-tag 2>/dev/null || true
       
       - name: Create Release with APK
         if: steps.build.outcome == 'success' && github.event_name == 'push' && github.ref == 'refs/heads/main'
@@ -66,6 +72,9 @@ jobs:
             
             ### 下载
             - `app-debug.apk` - 调试版本（可直接安装）
+            
+            ### 安装要求
+            - Android 7.0 (API 24) 及以上
           files: app/build/outputs/apk/debug/
           draft: false
           prerelease: false
