@@ -20,7 +20,7 @@ object CompressionUtils {
             val sourceFile = File(sourcePath)
             val destFile = File(destPath)
             
-            ZipOutputStream(BufferedOutputStream(FileOutputStream(destFile))).buffered()).use { zos ->
+            ZipOutputStream(BufferedOutputStream(FileOutputStream(destFile))).use { zos ->
                 if (sourceFile.isDirectory) {
                     zipDirectory(sourceFile, sourceFile.parentFile, zos, onProgress)
                 } else {
