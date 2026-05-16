@@ -30,7 +30,7 @@ jobs:
           gradle-version: '8.4'
       
       - name: Build Debug APK
-        run: gradle assembleDebug --no-daemon --stacktrace
+        run: gradle assembleDebug --no-daemon --stacktrace --info 2>&1 | grep -E "error:|Error:|e:|Unresolved|Cannot|None of|Overload|Type mismatch|Incompatible|expect" | head -100
       
       - name: Build Release APK
         run: gradle assembleRelease --no-daemon --stacktrace
