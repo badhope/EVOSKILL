@@ -75,8 +75,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.pulltorefresh.PullToRefreshContainer
-import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -94,7 +92,6 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -116,15 +113,6 @@ fun GameLibraryScreen(
     val uiState by viewModel.uiState
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
-    val pullRefreshState = rememberPullToRefreshState()
-
-    // 处理下拉刷新
-    if (pullRefreshState.isRefreshing) {
-        LaunchedEffect(true) {
-            viewModel.refresh()
-            pullRefreshState.endRefresh()
-        }
-    }
 
     // 监听事件
     LaunchedEffect(Unit) {
@@ -171,15 +159,11 @@ fun GameLibraryScreen(
         },
         snackbarHost = { SnackbarHost(snackbarHostState) }
     ) { paddingValues ->
-        Box(
+        Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .nestedScroll(pullRefreshState.nestedScrollConnection)
         ) {
-            Column(
-                modifier = Modifier.fillMaxSize()
-            ) {
                 // 搜索栏
                 SearchBar(
                     query = uiState.searchQuery,
@@ -214,12 +198,6 @@ fun GameLibraryScreen(
                     )
                 }
             }
-
-            // 下拉刷新指示器
-            PullToRefreshContainer(
-                state = pullRefreshState,
-                modifier = Modifier.align(Alignment.TopCenter)
-            )
         }
     }
 

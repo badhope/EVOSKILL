@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
+import kotlin.random.Random
 import javax.inject.Inject
 
 /**
@@ -260,7 +261,7 @@ class GameBoosterViewModel @Inject constructor(
 
     private fun getCurrentCpuTemp(): Float {
         // 实际实现中应该从系统获取
-        return (35f..65f).random()
+        return Random.nextDouble(35.0, 65.0).toFloat()
     }
 
     private fun getNetworkLatency(): Int {

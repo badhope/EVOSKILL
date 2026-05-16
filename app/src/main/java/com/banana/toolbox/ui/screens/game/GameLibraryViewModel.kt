@@ -210,7 +210,9 @@ class GameLibraryViewModel @Inject constructor(
      */
     fun toggleViewMode() {
         // 切换网格/列表视图
-        _events.emit(GameLibraryEvent.ShowSnackbar("切换视图模式"))
+        viewModelScope.launch {
+            _events.emit(GameLibraryEvent.ShowSnackbar("切换视图模式"))
+        }
     }
 
     /**
