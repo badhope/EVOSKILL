@@ -7,7 +7,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
-import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Divider
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -340,7 +340,7 @@ fun FileListItem(
             }
         }
     }
-    HorizontalDivider()
+    Divider()
 }
 
 /**
@@ -463,7 +463,7 @@ fun MoreOptionsMenu(
             leadingIcon = { Icon(Icons.Default.CreateNewFolder, null) },
             onClick = onDismiss
         )
-        HorizontalDivider()
+        Divider()
         DropdownMenuItem(
             text = { Text("存储分析") },
             leadingIcon = { Icon(Icons.Default.Storage, null) },
