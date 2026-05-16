@@ -8,6 +8,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     
     steps:
       - name: Checkout code
@@ -37,20 +39,17 @@ jobs:
           grep -E "e: file://|Unresolved|Cannot find|None of|Overload|Type mismatch|Incompatible|\.kt:" build_output.txt || echo "No specific errors found, showing last 50 lines:"
           tail -50 build_output.txt
       
+      - name: List APK files
+        if: steps.build.outcome == 'success'
+        run: find app/build/outputs/apk/debug/ -name "*.apk" -exec ls -la {} \;
+      
       - name: Upload Debug APK
         if: steps.build.outcome == 'success'
         uses: actions/upload-artifact@v4
         with:
           name: app-debug
-          path: app/build/outputs/apk/debug/
+          path: app/build/outputs/apk/debug/*.apk
           retention-days: 90
-      
-      - name: Delete old draft releases
-        if: steps.build.outcome == 'success' && github.event_name == 'push' && github.ref == 'refs/heads/main'
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          gh release list --json tagName,isDraft -q '.[] | select(.isDraft==true) | .tagName' | xargs -I{} gh release delete {} --yes --cleanup-tag 2>/dev/null || true
       
       - name: Create Release with APK
         if: steps.build.outcome == 'success' && github.event_name == 'push' && github.ref == 'refs/heads/main'
@@ -75,7 +74,7 @@ jobs:
             
             ### 安装要求
             - Android 7.0 (API 24) 及以上
-          files: app/build/outputs/apk/debug/
+          files: app/build/outputs/apk/debug/*.apk
           draft: false
           prerelease: false
         env:
