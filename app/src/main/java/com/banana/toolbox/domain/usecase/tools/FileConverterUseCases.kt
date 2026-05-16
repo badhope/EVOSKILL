@@ -4,7 +4,7 @@ import android.content.Context
 import android.graphics.*
 import android.net.Uri
 import android.provider.MediaStore
-import androidx.core.graphics.withAlpha
+import androidx.core.graphics.toColorInt
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.*
@@ -141,7 +141,7 @@ class FileConverterUseCases @Inject constructor(
         watermarkText: String,
         position: WatermarkPosition = WatermarkPosition.BOTTOM_RIGHT,
         textSize: Float = 40f,
-        color: Int = Color.WHITE.withAlpha(128)
+        color: Int = (Color.WHITE and 0x00FFFFFF) or (128 shl 24) // WHITE with 50% alpha
     ): Result<String> {
         return withContext(Dispatchers.IO) {
             try {

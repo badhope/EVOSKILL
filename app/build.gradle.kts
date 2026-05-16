@@ -89,6 +89,9 @@ dependencies {
     // Image Loading
     implementation("io.coil-kt:coil-compose:2.5.0")
 
+    // ZXing QR Code
+    implementation("com.google.zxing:core:3.5.2")
+
     // Internal modules
     implementation(project(":core-common"))
     implementation(project(":core-ui"))
