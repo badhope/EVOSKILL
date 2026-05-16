@@ -130,6 +130,7 @@ class FileManagerViewModel @Inject constructor(
                     _uiState.update { it.copy(isLoading = false, error = error.message) }
                 }
         }
+    }
     
     /**
      * 退出搜索
