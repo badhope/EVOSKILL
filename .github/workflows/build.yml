@@ -28,6 +28,10 @@ jobs:
         uses: gradle/actions/setup-gradle@v3
         with:
           gradle-version: '8.4'
+          cache-read-only: true
+
+      - name: Clean Build
+        run: gradle clean --no-daemon
 
       - name: Build Debug APK
         id: build
