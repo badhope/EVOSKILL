@@ -73,6 +73,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.foundation.indication
 import androidx.compose.foundation.ripple.rememberRipple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -237,7 +238,7 @@ private fun BoostGaugeSection(
         ) {
             // 外圈进度
             CircularProgressIndicator(
-                progress = { boostProgress },
+                progress = boostProgress,
                 modifier = Modifier.size(220.dp),
                 color = if (isBoosting) Color(0xFF4CAF50) else MaterialTheme.colorScheme.primary,
                 strokeWidth = 12.dp,
@@ -247,7 +248,7 @@ private fun BoostGaugeSection(
 
             // 内圈装饰
             CircularProgressIndicator(
-                progress = { 1f },
+                progress = 1f,
                 modifier = Modifier.size(180.dp),
                 color = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
                 strokeWidth = 2.dp,
@@ -483,11 +484,10 @@ private fun RealTimeStatItem(
 
         // 进度条
         LinearProgressIndicator(
-            progress = { progress },
+            progress = progress,
             modifier = Modifier.width(60.dp),
             color = color,
-            trackColor = color.copy(alpha = 0.2f),
-            drawStopIndicator = {}
+            trackColor = color.copy(alpha = 0.2f)
         )
     }
 }
@@ -823,11 +823,10 @@ private fun ComparisonBar(
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
             LinearProgressIndicator(
-                progress = { beforeProgress },
+                progress = beforeProgress,
                 modifier = Modifier.weight(1f),
                 color = Color(0xFFFF9800),
-                trackColor = Color(0xFFFF9800).copy(alpha = 0.2f),
-                drawStopIndicator = {}
+                trackColor = Color(0xFFFF9800).copy(alpha = 0.2f)
             )
             Spacer(modifier = Modifier.width(8.dp))
             Text(
@@ -850,11 +849,10 @@ private fun ComparisonBar(
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
             LinearProgressIndicator(
-                progress = { afterProgress },
+                progress = afterProgress,
                 modifier = Modifier.weight(1f),
                 color = Color(0xFF4CAF50),
-                trackColor = Color(0xFF4CAF50).copy(alpha = 0.2f),
-                drawStopIndicator = {}
+                trackColor = Color(0xFF4CAF50).copy(alpha = 0.2f)
             )
             Spacer(modifier = Modifier.width(8.dp))
             Text(

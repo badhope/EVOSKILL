@@ -60,7 +60,7 @@ import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
-import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -508,7 +508,7 @@ private fun GameOptionsBottomSheet(
                 }
             }
 
-            HorizontalDivider()
+            Divider()
 
             // 操作选项
             GameOptionItem(
