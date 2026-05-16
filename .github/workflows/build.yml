@@ -34,7 +34,9 @@ jobs:
       
       - name: Show Build Errors
         if: failure()
-        run: grep -E "e: file://|Unresolved|Cannot find|None of|Overload|Type mismatch|Incompatible|\.kt:" build_output.txt || echo "No specific errors found, showing last 50 lines:" && tail -50 build_output.txt
+        run: |
+          grep -E "e: file://|Unresolved|Cannot find|None of|Overload|Type mismatch|Incompatible|\.kt:" build_output.txt || echo "No specific errors found, showing last 50 lines:"
+          tail -50 build_output.txt
       
       - name: Upload Debug APK
         if: success()
