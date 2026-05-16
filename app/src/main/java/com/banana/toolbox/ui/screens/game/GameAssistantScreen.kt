@@ -99,8 +99,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.foundation.indication
-import androidx.compose.foundation.ripple.rememberRipple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -464,7 +462,7 @@ private fun QuickActionItem(
             .scale(scale)
             .clickable(
                 interactionSource = interactionSource,
-                indication = rememberRipple(),
+                indication = null,
                 onClick = onClick
             )
     ) {
@@ -570,7 +568,7 @@ private fun MacroRecordingSection(
                         .scale(scale)
                         .clickable(
                             interactionSource = interactionSource,
-                            indication = rememberRipple(bounded = true),
+                            indication = null,
                             onClick = {
                                 if (isRecording) onStopRecording() else onStartRecording()
                             }

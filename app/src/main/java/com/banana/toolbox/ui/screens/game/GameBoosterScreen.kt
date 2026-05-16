@@ -73,8 +73,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.foundation.indication
-import androidx.compose.foundation.ripple.rememberRipple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -338,7 +336,7 @@ private fun BoostButton(
             .scale(scale * pulseScale)
             .clickable(
                 interactionSource = interactionSource,
-                indication = rememberRipple(bounded = true, radius = 70.dp),
+                indication = null,
                 onClick = onClick
             ),
         shape = CircleShape,
@@ -597,7 +595,7 @@ private fun OptimizationCard(
             .scale(scale)
             .clickable(
                 interactionSource = interactionSource,
-                indication = rememberRipple(),
+                indication = null,
                 onClick = onClick
             ),
         shape = RoundedCornerShape(16.dp),

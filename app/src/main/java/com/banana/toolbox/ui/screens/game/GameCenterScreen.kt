@@ -77,8 +77,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.foundation.indication
-import androidx.compose.foundation.ripple.rememberRipple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -316,7 +314,7 @@ private fun FeaturedGameCard(
             .scale(scale)
             .clickable(
                 interactionSource = interactionSource,
-                indication = rememberRipple(),
+                indication = null,
                 onClick = { /* 启动游戏 */ }
             ),
         shape = RoundedCornerShape(20.dp),
@@ -573,7 +571,7 @@ private fun RecentGameCard(
             .scale(scale)
             .clickable(
                 interactionSource = interactionSource,
-                indication = rememberRipple(),
+                indication = null,
                 onClick = onClick
             ),
         shape = RoundedCornerShape(16.dp),
@@ -821,7 +819,7 @@ private fun CategoryCard(
             .scale(scale)
             .clickable(
                 interactionSource = interactionSource,
-                indication = rememberRipple(),
+                indication = null,
                 onClick = onClick
             ),
         shape = RoundedCornerShape(16.dp),
