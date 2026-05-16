@@ -2,7 +2,12 @@ package com.banana.toolbox.ui.navigation
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Apps
+import androidx.compose.material.icons.filled.Build
+import androidx.compose.material.icons.filled.Folder
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Wifi
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -189,10 +194,10 @@ data class BottomNavItem(
 @Composable
 fun getIconForName(name: String) = when (name) {
     "home" -> Icons.Default.Home
-    "folder" -> androidx.compose.material.icons.Icons.Default.Folder
-    "apps" -> androidx.compose.material.icons.Icons.Default.Apps
-    "wifi" -> androidx.compose.material.icons.Icons.Default.Wifi
-    "build" -> androidx.compose.material.icons.Icons.Default.Build
-    "sports_esports" -> androidx.compose.material.icons.Icons.Default.Info
-    else -> androidx.compose.material.icons.Icons.Default.Info
+    "folder" -> Icons.Default.Folder
+    "apps" -> Icons.Default.Apps
+    "wifi" -> Icons.Default.Wifi
+    "build" -> Icons.Default.Build
+    "sports_esports" -> Icons.Default.Info
+    else -> Icons.Default.Info
 }

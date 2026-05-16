@@ -250,7 +250,8 @@ fun ProgressDialog(
             Column {
                 LinearProgressIndicator(
                     progress = { progress / 100f },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    strokeCap = androidx.compose.ui.graphics.StrokeCap.Round
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
