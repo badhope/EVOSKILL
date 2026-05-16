@@ -2,6 +2,7 @@ package com.banana.toolbox.domain.usecase.tools
 
 import android.graphics.Color
 import java.security.SecureRandom
+import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -24,7 +25,11 @@ class GeneratorUseCases @Inject constructor() {
             UuidVersion.V4 -> UUID.randomUUID().toString()
             UuidVersion.V4_NO_DASHES -> UUID.randomUUID().toString().replace("-", "")
             UuidVersion.V4_UPPER -> UUID.randomUUID().toString().uppercase()
-            UuidVersion.V3 -> UUID.nameUUIDFromBytes(random.nextBytes(16)).toString()
+            UuidVersion.V3 -> {
+                val bytes = ByteArray(16)
+                random.nextBytes(bytes)
+                UUID.nameUUIDFromBytes(bytes).toString()
+            }
         }
     }
     

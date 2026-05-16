@@ -4,9 +4,11 @@ import android.content.Context
 import android.graphics.*
 import android.net.Uri
 import android.provider.MediaStore
+import androidx.core.graphics.withAlpha
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.*
+import java.nio.charset.Charset
 import java.security.SecureRandom
 import java.util.*
 import javax.inject.Inject
