@@ -6,6 +6,7 @@ import android.net.NetworkCapabilities
 import android.net.wifi.WifiManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.withContext
 import java.io.BufferedReader
@@ -135,9 +136,9 @@ class NetworkUseCases @Inject constructor() {
                 packetsSent = count,
                 packetsReceived = count - packetLoss,
                 packetLossPercent = (packetLoss * 100) / count,
-                minLatency = results.filter { it.success }.minOfOrNull { it.latency } ?: 0,
+                minLatency = results.filter { it.success }.mapNotNull { it.latency }.minOrNull() ?: 0,
                 avgLatency = if (count - packetLoss > 0) totalTime / (count - packetLoss) else 0,
-                maxLatency = results.filter { it.success }.maxOfOrNull { it.latency } ?: 0,
+                maxLatency = results.filter { it.success }.mapNotNull { it.latency }.maxOrNull() ?: 0,
                 pingItems = results
             )
         }

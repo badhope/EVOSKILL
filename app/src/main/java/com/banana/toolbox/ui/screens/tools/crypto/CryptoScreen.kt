@@ -1041,7 +1041,7 @@ private fun HashComputeTab(
                     ) {
                         HashAlgorithm.entries.forEach { algorithm ->
                             DropdownMenuItem(
-                                text = { Text(algorithm.name) },
+                                text = { Text(algorithm.algorithmName) },
                                 onClick = {
                                     viewModel.setHashAlgorithm(algorithm)
                                     algorithmExpanded = false

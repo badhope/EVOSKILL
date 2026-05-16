@@ -323,7 +323,7 @@ class CryptoUseCases @Inject constructor() {
     suspend fun hashFile(path: String, algorithm: HashAlgorithm = HashAlgorithm.MD5): Result<String> {
         return withContext(Dispatchers.IO) {
             try {
-                val digest = MessageDigest.getInstance(algorithm.name)
+                val digest = MessageDigest.getInstance(algorithm.algorithmName)
                 val file = File(path)
                 
                 file.inputStream().use { fis ->
@@ -346,7 +346,7 @@ class CryptoUseCases @Inject constructor() {
      * 计算文本哈希
      */
     fun hashText(text: String, algorithm: HashAlgorithm = HashAlgorithm.MD5): String {
-        val digest = MessageDigest.getInstance(algorithm.name)
+        val digest = MessageDigest.getInstance(algorithm.algorithmName)
         val hash = digest.digest(text.toByteArray()).joinToString("") { "%02x".format(it) }
         return hash
     }
@@ -366,7 +366,7 @@ enum class CryptoAlgorithm(val displayName: String, val keySize: Int) {
     AES_256("AES-256", 256)
 }
 
-enum class HashAlgorithm(override val name: String) {
+enum class HashAlgorithm(val algorithmName: String) {
     MD5("MD5"),
     SHA1("SHA-1"),
     SHA256("SHA-256"),

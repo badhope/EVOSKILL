@@ -85,7 +85,7 @@ class FileConverterUseCases @Inject constructor(
                 
                 val decodeOptions = BitmapFactory.Options().apply {
                     inJustDecodeBounds = false
-                    inSampleSize = inSampleSize
+                    this.inSampleSize = inSampleSize
                 }
                 
                 val bitmap = BitmapFactory.decodeFile(inputPath, decodeOptions)
