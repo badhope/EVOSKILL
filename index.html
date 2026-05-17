@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="mobile-web-app-capable" content="yes">
@@ -13,7 +13,7 @@
 </head>
 <body>
 <div id="app">
-    <!-- 顶栏：极简一行 -->
+    <!-- 顶栏 -->
     <header class="topbar">
         <div class="topbar-left">
             <span class="brand">&lt;/&gt;</span>
@@ -35,14 +35,14 @@
         </div>
     </header>
 
-    <!-- 编辑器：占满剩余空间 -->
+    <!-- 编辑器 -->
     <div class="editor-area" id="editor-area">
         <textarea id="code-editor" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off"
             placeholder="# 在这里输入代码...
 print('Hello, OnlineCode!')"></textarea>
     </div>
 
-    <!-- 输出面板：从底部滑出 -->
+    <!-- 输出面板 -->
     <div class="output-panel" id="output-panel">
         <div class="output-header">
             <span>输出</span>
@@ -70,15 +70,17 @@ print('Hello, OnlineCode!')"></textarea>
         <svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>
     </button>
 
-    <!-- 运行状态提示条 -->
+    <!-- 状态提示 -->
     <div class="run-toast" id="run-toast">
         <span class="toast-dot"></span>
         <span id="toast-text">就绪</span>
     </div>
 </div>
 
-<!-- 菜单面板 -->
+<!-- 遮罩 -->
 <div class="overlay" id="menu-overlay"></div>
+
+<!-- 菜单面板 -->
 <div class="menu-panel" id="menu-panel">
     <div class="menu-section">
         <div class="menu-title">文件</div>
@@ -168,7 +170,7 @@ print('Hello, OnlineCode!')"></textarea>
     </div>
 </div>
 
-<!-- 加载遮罩 -->
+<!-- 加载 -->
 <div class="loading" id="loading">
     <div class="spinner"></div>
     <span>初始化中...</span>
