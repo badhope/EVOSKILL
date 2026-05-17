@@ -123,7 +123,7 @@ fun NetworkStatusCard() {
             
             Spacer(modifier = Modifier.height(12.dp))
             
-            HorizontalDivider()
+            Divider()
             
             Spacer(modifier = Modifier.height(12.dp))
             

@@ -254,6 +254,7 @@ private fun SearchBar(
 /**
  * 分类筛选Chip
  */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun CategoryFilterChips(
     selectedCategory: GameCategory?,

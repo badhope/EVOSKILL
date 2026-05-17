@@ -16,6 +16,7 @@ import androidx.compose.material.icons.filled.*
 /**
  * 首页
  */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     onNavigateToFileManager: () -> Unit,

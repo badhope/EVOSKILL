@@ -42,7 +42,7 @@ import androidx.compose.material.icons.filled.MusicNote
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.SelectAll
 import androidx.compose.material.icons.filled.VideoFile
-import androidx.compose.material.icons.filled.ZipFile
+import androidx.compose.material.icons.filled.FolderZip
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -50,7 +50,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
-import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
@@ -630,7 +630,7 @@ private fun FileSearchTab(
                                     FileTypeFilter.VIDEO -> Icons.Default.VideoFile
                                     FileTypeFilter.AUDIO -> Icons.Default.MusicNote
                                     FileTypeFilter.DOC -> Icons.Default.Description
-                                    FileTypeFilter.ARCHIVE -> Icons.Default.ZipFile
+                                    FileTypeFilter.ARCHIVE -> Icons.Default.FolderZip
                                 },
                                 contentDescription = null,
                                 modifier = Modifier.size(16.dp)
@@ -692,7 +692,7 @@ private fun FileSearchTab(
             }
         }
 
-        HorizontalDivider()
+        Divider()
 
         // 搜索结果
         if (uiState.searchResults.isNotEmpty()) {
@@ -920,7 +920,7 @@ private fun LargeFilesTab(
             }
         }
 
-        HorizontalDivider()
+        Divider()
 
         // 结果区域
         if (uiState.largeFiles.isNotEmpty()) {
@@ -1140,7 +1140,7 @@ private fun DuplicatesTab(
             }
         }
 
-        HorizontalDivider()
+        Divider()
 
         // 结果区域
         if (uiState.similarGroups.isNotEmpty()) {
