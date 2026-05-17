@@ -1,26 +1,27 @@
 /**
- * OnlineCode - 主应用逻辑
+ * OnlineCode - 主应用逻辑（移动端优化版）
  */
 
 class OnlineCode {
     constructor() {
         this.currentLang = 'python';
         this.isRunning = false;
+        this.fontSize = 14;
         this.init();
     }
 
     init() {
         this.bindEvents();
         this.initEditor();
+        this.initDivider();
         this.loadRuntime();
     }
 
     bindEvents() {
-        // 语言切换
-        document.querySelectorAll('.nav-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                this.switchLanguage(e.target.dataset.lang);
-            });
+        // 语言切换（下拉选择器）
+        const langSelect = document.getElementById('lang-select');
+        langSelect.addEventListener('change', (e) => {
+            this.switchLanguage(e.target.value);
         });
 
         // Tab切换
@@ -34,48 +35,77 @@ class OnlineCode {
         document.getElementById('btn-run').addEventListener('click', () => this.runCode());
         document.getElementById('btn-stop').addEventListener('click', () => this.stopCode());
 
-        // 包管理
-        document.getElementById('btn-packages').addEventListener('click', () => {
-            document.getElementById('modal-packages').classList.add('active');
+        // 清空控制台
+        document.getElementById('btn-clear-console').addEventListener('click', () => {
+            document.getElementById('console-output').innerHTML = '';
         });
 
-        // 设置
-        document.getElementById('btn-settings').addEventListener('click', () => {
-            document.getElementById('modal-settings').classList.add('active');
+        // 更多菜单
+        document.getElementById('btn-more').addEventListener('click', () => {
+            this.openSheet('sheet-more', 'sheet-overlay');
         });
 
-        // 关闭弹窗
-        document.querySelectorAll('.modal-close').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.target.closest('.modal').classList.remove('active');
+        // 底部导航
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', (e) => {
+                const panel = e.currentTarget.dataset.panel;
+                this.handleNavTap(panel);
             });
         });
 
-        // 点击遮罩关闭
-        document.querySelectorAll('.modal').forEach(modal => {
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) modal.classList.remove('active');
+        // 关闭sheet
+        document.querySelectorAll('.sheet-overlay').forEach(overlay => {
+            overlay.addEventListener('click', () => {
+                this.closeAllSheets();
             });
         });
 
         // 字体大小
-        const fontSizeInput = document.getElementById('font-size');
-        fontSizeInput.addEventListener('input', (e) => {
-            const size = e.target.value;
-            document.getElementById('font-size-value').textContent = size + 'px';
-            document.getElementById('code-editor').style.fontSize = size + 'px';
+        document.getElementById('font-decrease').addEventListener('click', () => {
+            this.setFontSize(this.fontSize - 1);
+        });
+        document.getElementById('font-increase').addEventListener('click', () => {
+            this.setFontSize(this.fontSize + 1);
         });
 
         // 主题切换
         document.getElementById('theme-select').addEventListener('change', (e) => {
             this.setTheme(e.target.value);
         });
+
+        // 全屏
+        document.getElementById('btn-fullscreen').addEventListener('click', () => {
+            this.toggleFullscreen();
+        });
+
+        // 保存/加载
+        document.getElementById('btn-save').addEventListener('click', () => {
+            if (window.codeEditor) window.codeEditor.saveCode();
+            this.closeAllSheets();
+        });
+
+        document.getElementById('btn-load').addEventListener('click', () => {
+            if (window.codeEditor) window.codeEditor.loadCode();
+            this.closeAllSheets();
+        });
+
+        // 分享
+        document.getElementById('btn-share').addEventListener('click', () => {
+            this.shareCode();
+            this.closeAllSheets();
+        });
+
+        // 虚拟键盘适配
+        if (window.visualViewport) {
+            window.visualViewport.addEventListener('resize', () => {
+                document.documentElement.style.setProperty('--vh', window.visualViewport.height + 'px');
+            });
+        }
     }
 
     initEditor() {
         const editor = document.getElementById('code-editor');
         
-        // 光标位置更新
         editor.addEventListener('keyup', () => this.updateCursorPos());
         editor.addEventListener('click', () => this.updateCursorPos());
         
@@ -91,50 +121,95 @@ class OnlineCode {
         });
     }
 
+    // 可拖拽分割线
+    initDivider() {
+        const divider = document.getElementById('divider');
+        const editorSection = document.getElementById('editor-section');
+        const outputSection = document.getElementById('output-section');
+        const main = document.getElementById('main');
+        let isDragging = false;
+        let startPos = 0;
+        let startEditorSize = 0;
+
+        const onStart = (e) => {
+            isDragging = true;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            startPos = clientY || clientX;
+            startEditorSize = editorSection.getBoundingClientRect();
+            document.body.style.userSelect = 'none';
+            document.body.style.webkitUserSelect = 'none';
+        };
+
+        const onMove = (e) => {
+            if (!isDragging) return;
+            e.preventDefault();
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const mainRect = main.getBoundingClientRect();
+            
+            const isVertical = getComputedStyle(main).flexDirection === 'column';
+            
+            if (isVertical) {
+                const offset = clientY - mainRect.top;
+                const total = mainRect.height;
+                const pct = Math.max(20, Math.min(80, (offset / total) * 100));
+                editorSection.style.flex = 'none';
+                editorSection.style.height = pct + '%';
+                outputSection.style.flex = '1';
+            } else {
+                const offset = clientX - mainRect.left;
+                const total = mainRect.width;
+                const pct = Math.max(20, Math.min(80, (offset / total) * 100));
+                editorSection.style.flex = 'none';
+                editorSection.style.width = pct + '%';
+                outputSection.style.flex = '1';
+            }
+        };
+
+        const onEnd = () => {
+            isDragging = false;
+            document.body.style.userSelect = '';
+            document.body.style.webkitUserSelect = '';
+        };
+
+        divider.addEventListener('mousedown', onStart);
+        divider.addEventListener('touchstart', onStart, { passive: true });
+        document.addEventListener('mousemove', onMove);
+        document.addEventListener('touchmove', onMove, { passive: false });
+        document.addEventListener('mouseup', onEnd);
+        document.addEventListener('touchend', onEnd);
+    }
+
     updateCursorPos() {
         const editor = document.getElementById('code-editor');
         const text = editor.value.substring(0, editor.selectionStart);
         const lines = text.split('\n');
         const line = lines.length;
         const col = lines[lines.length - 1].length + 1;
-        document.getElementById('cursor-pos').textContent = `Ln ${line}, Col ${col}`;
+        document.getElementById('cursor-pos').textContent = `${line}:${col}`;
     }
 
     switchLanguage(lang) {
         this.currentLang = lang;
-        
-        // 更新按钮状态
-        document.querySelectorAll('.nav-btn').forEach(btn => {
-            btn.classList.toggle('active', btn.dataset.lang === lang);
-        });
 
-        // 更新文件名和状态
-        const extensions = {
-            python: 'py',
-            cpp: 'cpp',
-            rust: 'rs',
-            go: 'go',
-            js: 'js'
-        };
-        
+        const extensions = { python: 'py', cpp: 'cpp', rust: 'rs', go: 'go', js: 'js' };
         const runtimeNames = {
-            python: 'Python 3.11 (Pyodide)',
-            cpp: 'C/C++ (WebAssembly)',
-            rust: 'Rust (WebAssembly)',
-            go: 'Go (WebAssembly)',
-            js: 'JavaScript (V8)'
+            python: 'Python 3.11',
+            cpp: 'C/C++ (WASM)',
+            rust: 'Rust (WASM)',
+            go: 'Go (WASM)',
+            js: 'JavaScript'
         };
 
-        document.querySelector('.filename').textContent = `main.${extensions[lang]}`;
-        document.getElementById('lang-status').textContent = runtimeNames[lang];
+        document.getElementById('filename').textContent = `main.${extensions[lang]}`;
 
-        // 更新编辑器placeholder
         const placeholders = {
-            python: "# 在这里输入Python代码...\nprint('Hello, World!')",
-            cpp: "// 在这里输入C++代码...\n#include <iostream>\n\nint main() {\n    std::cout << \"Hello, World!\" << std::endl;\n    return 0;\n}",
-            rust: "// 在这里输入Rust代码...\nfn main() {\n    println!(\"Hello, World!\");\n}",
-            go: "// 在这里输入Go代码...\npackage main\n\nimport \"fmt\"\n\nfunc main() {\n    fmt.Println(\"Hello, World!\")\n}",
-            js: "// 在这里输入JavaScript代码...\nconsole.log('Hello, World!');"
+            python: "# 在这里输入代码...\nprint('Hello, OnlineCode!')",
+            cpp: "// 在这里输入代码...\n#include <iostream>\n\nint main() {\n    std::cout << \"Hello!\" << std::endl;\n    return 0;\n}",
+            rust: "// 在这里输入代码...\nfn main() {\n    println!(\"Hello!\");\n}",
+            go: "// 在这里输入代码...\npackage main\n\nimport \"fmt\"\n\nfunc main() {\n    fmt.Println(\"Hello!\")\n}",
+            js: "// 在这里输入代码...\nconsole.log('Hello!');"
         };
         
         document.getElementById('code-editor').placeholder = placeholders[lang];
@@ -144,21 +219,57 @@ class OnlineCode {
         document.querySelectorAll('.tab-btn').forEach(btn => {
             btn.classList.toggle('active', btn.dataset.tab === tab);
         });
-        
         document.querySelectorAll('.tab-panel').forEach(panel => {
             panel.classList.toggle('active', panel.id === `panel-${tab}`);
         });
     }
 
+    handleNavTap(panel) {
+        // 更新导航高亮
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.classList.toggle('active', item.dataset.panel === panel);
+        });
+
+        switch (panel) {
+            case 'editor':
+                this.closeAllSheets();
+                break;
+            case 'output':
+                this.closeAllSheets();
+                // 滚动到输出区域
+                document.getElementById('output-section').scrollIntoView({ behavior: 'smooth' });
+                break;
+            case 'packages':
+                this.openSheet('sheet-packages', 'sheet-overlay-pkg');
+                break;
+            case 'settings':
+                this.openSheet('sheet-settings', 'sheet-overlay-settings');
+                break;
+        }
+    }
+
+    openSheet(sheetId, overlayId) {
+        this.closeAllSheets();
+        const sheet = document.getElementById(sheetId);
+        const overlay = document.getElementById(overlayId);
+        if (overlay) overlay.classList.add('active');
+        // 延迟一帧触发动画
+        requestAnimationFrame(() => {
+            sheet.classList.add('active');
+        });
+    }
+
+    closeAllSheets() {
+        document.querySelectorAll('.bottom-sheet').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('.sheet-overlay').forEach(o => o.classList.remove('active'));
+    }
+
     async loadRuntime() {
         const loading = document.getElementById('loading-overlay');
         loading.classList.add('active');
-
-        // 模拟加载Pyodide
         setTimeout(() => {
-            document.getElementById('runtime-status').textContent = 'Pyodide 已就绪';
             loading.classList.remove('active');
-        }, 2000);
+        }, 1500);
     }
 
     async runCode() {
@@ -167,34 +278,36 @@ class OnlineCode {
         this.isRunning = true;
         document.getElementById('btn-run').disabled = true;
         document.getElementById('btn-stop').disabled = false;
-        document.getElementById('status').textContent = '运行中...';
+        document.getElementById('status-text').textContent = '运行中...';
+        document.querySelector('.status-dot').classList.add('running');
+
+        // 切换到控制台tab
+        this.switchTab('console');
 
         const code = document.getElementById('code-editor').value;
         const consoleOutput = document.getElementById('console-output');
-        
-        // 清空控制台
         consoleOutput.innerHTML = '';
-        this.log('info', `正在运行 ${this.currentLang.toUpperCase()} 代码...`);
+        this.log('info', `>>> 运行 ${this.currentLang.toUpperCase()} ...`);
 
-        // 模拟执行
         setTimeout(() => {
             if (this.currentLang === 'python') {
-                this.log('output', 'Hello, World!');
+                this.log('output', 'Hello, OnlineCode!');
             } else if (this.currentLang === 'js') {
-                this.log('output', 'Hello, World!');
+                this.log('output', 'Hello, OnlineCode!');
             } else {
-                this.log('info', `${this.currentLang.toUpperCase()} 编译器正在开发中...`);
+                this.log('warn', `${this.currentLang.toUpperCase()} 编译器开发中...`);
             }
-            
+            this.log('info', '✓ 执行完成 (0.02s)');
             this.stopCode();
-        }, 1000);
+        }, 800);
     }
 
     stopCode() {
         this.isRunning = false;
         document.getElementById('btn-run').disabled = false;
         document.getElementById('btn-stop').disabled = true;
-        document.getElementById('status').textContent = '就绪';
+        document.getElementById('status-text').textContent = '就绪';
+        document.querySelector('.status-dot').classList.remove('running');
     }
 
     log(type, message) {
@@ -206,19 +319,62 @@ class OnlineCode {
         consoleOutput.scrollTop = consoleOutput.scrollHeight;
     }
 
+    setFontSize(size) {
+        this.fontSize = Math.max(10, Math.min(24, size));
+        document.getElementById('code-editor').style.fontSize = this.fontSize + 'px';
+        document.getElementById('font-size-value').textContent = this.fontSize;
+    }
+
     setTheme(theme) {
-        document.body.setAttribute('data-theme', theme);
+        if (theme === 'light') {
+            document.documentElement.style.setProperty('--bg-primary', '#ffffff');
+            document.documentElement.style.setProperty('--bg-secondary', '#f6f8fa');
+            document.documentElement.style.setProperty('--bg-tertiary', '#eaeef2');
+            document.documentElement.style.setProperty('--bg-elevated', '#f0f3f6');
+            document.documentElement.style.setProperty('--text-primary', '#1f2328');
+            document.documentElement.style.setProperty('--text-secondary', '#656d76');
+            document.documentElement.style.setProperty('--text-muted', '#8b949e');
+            document.documentElement.style.setProperty('--border', '#d0d7de');
+        } else {
+            document.documentElement.style.setProperty('--bg-primary', '#0d1117');
+            document.documentElement.style.setProperty('--bg-secondary', '#161b22');
+            document.documentElement.style.setProperty('--bg-tertiary', '#21262d');
+            document.documentElement.style.setProperty('--bg-elevated', '#1c2128');
+            document.documentElement.style.setProperty('--text-primary', '#e6edf3');
+            document.documentElement.style.setProperty('--text-secondary', '#8b949e');
+            document.documentElement.style.setProperty('--text-muted', '#484f58');
+            document.documentElement.style.setProperty('--border', '#30363d');
+        }
+    }
+
+    toggleFullscreen() {
+        if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen().catch(() => {});
+        } else {
+            document.exitFullscreen();
+        }
+        this.closeAllSheets();
+    }
+
+    shareCode() {
+        const code = document.getElementById('code-editor').value;
+        if (navigator.share) {
+            navigator.share({
+                title: 'OnlineCode',
+                text: code
+            }).catch(() => {});
+        } else {
+            navigator.clipboard.writeText(code).then(() => {
+                this.log('info', '代码已复制到剪贴板');
+            });
+        }
     }
 }
 
-// 初始化应用
 document.addEventListener('DOMContentLoaded', () => {
     window.app = new OnlineCode();
 });
 
-// 注册Service Worker (PWA)
 if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js')
-        .then(reg => console.log('Service Worker registered'))
-        .catch(err => console.log('Service Worker registration failed'));
+    navigator.serviceWorker.register('sw.js').catch(() => {});
 }
