@@ -1,17 +1,19 @@
 /**
- * OnlineCode - 极简版主逻辑
+ * OnlineCode - 极简版主逻辑（含设置扩展）
  */
 class OnlineCode {
     constructor() {
         this.currentLang = 'python';
         this.isRunning = false;
         this.fontSize = 14;
+        this.history = JSON.parse(localStorage.getItem('oc_history') || '[]');
         this.init();
     }
 
     init() {
         this.bindEvents();
         this.loadRuntime();
+        this.renderHistory();
     }
 
     bindEvents() {
@@ -43,16 +45,37 @@ class OnlineCode {
         document.getElementById('mi-clear').addEventListener('click', () => { document.getElementById('code-editor').value = ''; this.closeAll(); });
         document.getElementById('mi-fullscreen').addEventListener('click', () => { this.toggleFullscreen(); this.closeAll(); });
 
-        // 子面板
-        document.getElementById('mi-packages').addEventListener('click', () => this.openSub('sub-packages'));
-        document.getElementById('mi-settings').addEventListener('click', () => this.openSub('sub-settings'));
-        document.getElementById('pkg-back').addEventListener('click', () => this.closeSub('sub-packages'));
+        // 设置面板
+        document.getElementById('mi-settings').addEventListener('click', () => {
+            this.openSub('sub-settings');
+            this.renderHistory();
+        });
         document.getElementById('settings-back').addEventListener('click', () => this.closeSub('sub-settings'));
 
-        // 设置
+        // 设置标签页切换
+        document.querySelectorAll('.stab').forEach(tab => {
+            tab.addEventListener('click', e => {
+                const target = e.target.dataset.stab;
+                document.querySelectorAll('.stab').forEach(t => t.classList.remove('active'));
+                e.target.classList.add('active');
+                document.querySelectorAll('.stab-panel').forEach(p => p.classList.remove('active'));
+                document.getElementById('stab-' + target).classList.add('active');
+            });
+        });
+
+        // 设置项
         document.getElementById('font-dec').addEventListener('click', () => this.setFont(this.fontSize - 1));
         document.getElementById('font-inc').addEventListener('click', () => this.setFont(this.fontSize + 1));
         document.getElementById('theme-select').addEventListener('change', e => this.setTheme(e.target.value));
+
+        // 数据管理
+        document.getElementById('btn-export').addEventListener('click', () => this.exportData());
+        document.getElementById('btn-import').addEventListener('click', () => document.getElementById('file-import').click());
+        document.getElementById('file-import').addEventListener('change', e => this.importData(e));
+        document.getElementById('btn-clear-all').addEventListener('click', () => this.clearAllData());
+
+        // 历史记录
+        document.getElementById('btn-clear-history').addEventListener('click', () => this.clearHistory());
 
         // Tab键
         const editor = document.getElementById('code-editor');
@@ -153,13 +176,11 @@ class OnlineCode {
             await window.compiler.run(
                 this.currentLang,
                 code,
-                // onOutput
                 (text) => {
                     text.split('\n').forEach(line => {
                         if (line) this.log('out', line);
                     });
                 },
-                // onError
                 (text) => {
                     text.split('\n').forEach(line => {
                         if (line) this.log('err', line);
@@ -172,6 +193,10 @@ class OnlineCode {
 
         const elapsed = ((performance.now() - startTime) / 1000).toFixed(2);
         this.log('info', `✓ 完成 (${elapsed}s)`);
+
+        // 添加到历史
+        this.addToHistory(code);
+
         this.stopCode();
     }
 
@@ -190,6 +215,54 @@ class OnlineCode {
         div.textContent = msg;
         con.appendChild(div);
         con.scrollTop = con.scrollHeight;
+    }
+
+    addToHistory(code) {
+        const item = {
+            lang: this.currentLang,
+            code: code.substring(0, 200),
+            time: new Date().toLocaleString('zh-CN', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
+        };
+        this.history.unshift(item);
+        if (this.history.length > 50) this.history = this.history.slice(0, 50);
+        localStorage.setItem('oc_history', JSON.stringify(this.history));
+    }
+
+    renderHistory() {
+        const list = document.getElementById('history-list');
+        if (this.history.length === 0) {
+            list.innerHTML = '<div class="history-empty">暂无运行历史</div>';
+            return;
+        }
+        list.innerHTML = this.history.map((h, i) => `
+            <div class="history-item">
+                <div class="lang">${h.lang.substring(0, 2).toUpperCase()}</div>
+                <div class="info">
+                    <div class="code">${h.code.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</div>
+                    <div class="time">${h.time}</div>
+                </div>
+                <button class="btn-load" data-idx="${i}">加载</button>
+            </div>
+        `).join('');
+
+        list.querySelectorAll('.btn-load').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const idx = parseInt(btn.dataset.idx);
+                const item = this.history[idx];
+                this.currentLang = item.lang;
+                document.getElementById('lang-picker').value = item.lang;
+                this.switchLang(item.lang);
+                document.getElementById('code-editor').value = item.code;
+                this.closeAll();
+                this.showToast('已加载历史记录');
+            });
+        });
+    }
+
+    clearHistory() {
+        this.history = [];
+        localStorage.removeItem('oc_history');
+        this.renderHistory();
     }
 
     saveCode(silent = false) {
@@ -213,6 +286,64 @@ class OnlineCode {
         } else {
             navigator.clipboard.writeText(code).then(() => this.showToast('已复制'));
         }
+    }
+
+    exportData() {
+        const data = {
+            python: localStorage.getItem('oc_python') || '',
+            cpp: localStorage.getItem('oc_cpp') || '',
+            rust: localStorage.getItem('oc_rust') || '',
+            go: localStorage.getItem('oc_go') || '',
+            js: localStorage.getItem('oc_js') || '',
+            history: this.history,
+            exportedAt: new Date().toISOString()
+        };
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `onlinecode-backup-${new Date().toISOString().split('T')[0]}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+        this.showToast('已导出');
+    }
+
+    importData(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+            try {
+                const data = JSON.parse(ev.target.result);
+                if (data.python) localStorage.setItem('oc_python', data.python);
+                if (data.cpp) localStorage.setItem('oc_cpp', data.cpp);
+                if (data.rust) localStorage.setItem('oc_rust', data.rust);
+                if (data.go) localStorage.setItem('oc_go', data.go);
+                if (data.js) localStorage.setItem('oc_js', data.js);
+                if (data.history) {
+                    this.history = data.history;
+                    localStorage.setItem('oc_history', JSON.stringify(this.history));
+                }
+                this.renderHistory();
+                this.showToast('导入成功');
+            } catch (err) {
+                this.showToast('导入失败：文件格式错误');
+            }
+        };
+        reader.readAsText(file);
+        e.target.value = '';
+    }
+
+    clearAllData() {
+        if (!confirm('确定要清除所有数据吗？此操作不可恢复。')) return;
+        ['python', 'cpp', 'rust', 'go', 'js'].forEach(lang => {
+            localStorage.removeItem('oc_' + lang);
+        });
+        localStorage.removeItem('oc_history');
+        this.history = [];
+        this.renderHistory();
+        document.getElementById('code-editor').value = '';
+        this.showToast('所有数据已清除');
     }
 
     setFont(size) {
