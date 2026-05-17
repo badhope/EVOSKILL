@@ -8,16 +8,14 @@ import androidx.compose.ui.Modifier
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DeepInspectorScreen(
-    onNavigateBack: () -> Unit
-) {
+fun DeepInspectorScreen(onNavigateBack: () -> Unit = {}) {
     Scaffold(
         topBar = {
             TopAppBar(
                 title = { Text("深度检查") },
                 navigationIcon = {
                     IconButton(onClick = onNavigateBack) {
-                        Icon(Icons.Default.ArrowBack, "返回")
+                        Icon(androidx.compose.material.icons.Icons.Default.ArrowBack, "返回")
                     }
                 }
             )

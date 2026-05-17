@@ -5,20 +5,17 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CleanerScreen(
-    onNavigateBack: () -> Unit
-) {
+fun CleanerScreen(onNavigateBack: () -> Unit = {}) {
     Scaffold(
         topBar = {
             TopAppBar(
                 title = { Text("清理工具") },
                 navigationIcon = {
                     IconButton(onClick = onNavigateBack) {
-                        Icon(Icons.Default.ArrowBack, "返回")
+                        Icon(androidx.compose.material.icons.Icons.Default.ArrowBack, "返回")
                     }
                 }
             )
