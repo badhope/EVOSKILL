@@ -130,6 +130,12 @@ class OnlineCode {
 
     async runCode() {
         if (this.isRunning) return;
+        const code = document.getElementById('code-editor').value.trim();
+        if (!code) {
+            this.showToast('请先输入代码');
+            return;
+        }
+
         this.isRunning = true;
         document.getElementById('fab-run').style.display = 'none';
         document.getElementById('fab-stop').style.display = 'flex';
@@ -139,17 +145,34 @@ class OnlineCode {
         document.getElementById('output-panel').classList.add('open');
         const con = document.getElementById('console-output');
         con.innerHTML = '';
-        this.log('info', `>>> ${this.currentLang.toUpperCase()}`);
+        this.log('info', `>>> ${this.currentLang.toUpperCase()} 运行中...`);
 
-        setTimeout(() => {
-            if (this.currentLang === 'python' || this.currentLang === 'js') {
-                this.log('out', 'Hello, OnlineCode!');
-            } else {
-                this.log('warn', `${this.currentLang.toUpperCase()} 编译器开发中`);
-            }
-            this.log('info', '✓ 完成 (0.02s)');
-            this.stopCode();
-        }, 800);
+        const startTime = performance.now();
+
+        try {
+            await window.compiler.run(
+                this.currentLang,
+                code,
+                // onOutput
+                (text) => {
+                    text.split('\n').forEach(line => {
+                        if (line) this.log('out', line);
+                    });
+                },
+                // onError
+                (text) => {
+                    text.split('\n').forEach(line => {
+                        if (line) this.log('err', line);
+                    });
+                }
+            );
+        } catch (e) {
+            this.log('err', e.message || String(e));
+        }
+
+        const elapsed = ((performance.now() - startTime) / 1000).toFixed(2);
+        this.log('info', `✓ 完成 (${elapsed}s)`);
+        this.stopCode();
     }
 
     stopCode() {
@@ -218,8 +241,17 @@ class OnlineCode {
 
     async loadRuntime() {
         const ld = document.getElementById('loading');
+        const loadText = document.getElementById('loading-text');
         ld.classList.add('show');
-        setTimeout(() => ld.classList.remove('show'), 1200);
+
+        try {
+            await window.compiler.initPython();
+            loadText.textContent = '加载完成!';
+            setTimeout(() => ld.classList.remove('show'), 500);
+        } catch (e) {
+            loadText.textContent = 'Python 加载失败，JS仍可用';
+            setTimeout(() => ld.classList.remove('show'), 2000);
+        }
     }
 }
 

@@ -1,97 +1,150 @@
 /**
- * OnlineCode - 编译器模块
- * 多语言编译执行支持
+ * OnlineCode - 真正的代码编译执行引擎
  */
 
 class Compiler {
     constructor() {
-        this.runtimes = {};
-        this.init();
-    }
-
-    async init() {
-        // 初始化各语言运行时
-        await this.initPython();
+        this.pyodide = null;
+        this.ready = false;
+        this.loading = false;
     }
 
     async initPython() {
-        // Pyodide 初始化（实际项目中通过CDN加载）
-        this.runtimes.python = {
-            ready: true,
-            run: (code) => {
-                // 模拟Python执行
-                return new Promise((resolve) => {
-                    setTimeout(() => {
-                        resolve({ output: 'Hello, World!', error: null });
-                    }, 500);
-                });
-            }
-        };
+        if (this.pyodide) return;
+        this.loading = true;
+        const loadText = document.getElementById('loading-text');
+        try {
+            loadText.textContent = '正在加载 Python 运行环境...';
+            this.pyodide = await loadPyodide({
+                indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.24.1/full/'
+            });
+            this.ready = true;
+            this.loading = false;
+        } catch (e) {
+            loadText.textContent = 'Python 环境加载失败，请刷新重试';
+            this.loading = false;
+            throw e;
+        }
     }
 
-    async run(lang, code) {
+    async run(lang, code, onOutput, onError) {
         switch (lang) {
-            case 'python':
-                return await this.runPython(code);
-            case 'js':
-                return await this.runJavaScript(code);
-            case 'cpp':
-            case 'rust':
-            case 'go':
-                return { output: null, error: `${lang.toUpperCase()} 编译器正在开发中...` };
+            case 'python': return await this.runPython(code, onOutput, onError);
+            case 'js': return this.runJS(code, onOutput, onError);
             default:
-                return { output: null, error: '不支持的语言' };
+                onError(`${lang.toUpperCase()} 编译器正在开发中，目前支持 Python 和 JavaScript`);
+                return;
         }
     }
 
-    async runPython(code) {
+    async runPython(code, onOutput, onError) {
+        if (!this.pyodide) {
+            onError('Python 环境尚未加载完成，请稍候...');
+            return;
+        }
+
         try {
-            // 实际项目中使用 Pyodide
-            // const result = await pyodide.runPythonAsync(code);
-            // return { output: result, error: null };
-            
-            // 模拟执行
-            if (code.includes('print')) {
-                const match = code.match(/print\(['"](.+?)['"]\)/);
-                const output = match ? match[1] : 'Hello, World!';
-                return { output, error: null };
+            // 重定向 stdout 和 stderr
+            this.pyodide.runPython(`
+import sys
+from io import StringIO
+sys.stdout = StringIO()
+sys.stderr = StringIO()
+`);
+
+            // 执行用户代码
+            const result = this.pyodide.runPython(code);
+
+            // 获取输出
+            const stdout = this.pyodide.runPython('sys.stdout.getvalue()');
+            const stderr = this.pyodide.runPython('sys.stderr.getvalue()');
+
+            if (stdout) onOutput(stdout);
+            if (stderr) onError(stderr);
+            if (result !== undefined && result !== null && !stdout) {
+                onOutput(String(result));
             }
-            return { output: '代码执行完成', error: null };
-        } catch (err) {
-            return { output: null, error: err.message };
+        } catch (e) {
+            // 解析错误信息，提取行号
+            let errMsg = e.message;
+            if (errMsg.includes('PythonError')) {
+                errMsg = errMsg.split('\n').slice(1).join('\n').trim();
+            }
+            onError(errMsg);
+        } finally {
+            // 恢复 stdout/stderr
+            try {
+                this.pyodide.runPython(`
+import sys
+sys.stdout = sys.__stdout__
+sys.stderr = sys.__stderr__
+`);
+            } catch (e) {}
         }
     }
 
-    async runJavaScript(code) {
+    runJS(code, onOutput, onError) {
         try {
-            let output = '';
-            const originalLog = console.log;
+            // 劫持 console.log / console.error / console.warn
+            const origLog = console.log;
+            const origError = console.error;
+            const origWarn = console.warn;
+
+            const outputs = [];
+
             console.log = (...args) => {
-                output += args.join(' ') + '\n';
+                outputs.push({ type: 'out', text: args.map(a => {
+                    if (typeof a === 'object') return JSON.stringify(a, null, 2);
+                    return String(a);
+                }).join(' ') });
+            };
+            console.error = (...args) => {
+                outputs.push({ type: 'err', text: args.map(a => String(a)).join(' ') });
+            };
+            console.warn = (...args) => {
+                outputs.push({ type: 'warn', text: args.map(a => String(a)).join(' ') });
             };
 
-            // 使用 Function 构造器安全执行
+            // 执行代码
             const fn = new Function(code);
             fn();
 
-            console.log = originalLog;
-            return { output: output || 'undefined', error: null };
-        } catch (err) {
-            return { output: null, error: err.message };
+            // 恢复
+            console.log = origLog;
+            console.error = origError;
+            console.warn = origWarn;
+
+            // 输出结果
+            if (outputs.length === 0) {
+                onOutput('(代码执行完成，无输出)');
+            } else {
+                outputs.forEach(o => {
+                    if (o.type === 'err') onError(o.text);
+                    else if (o.type === 'warn') onOutput('[警告] ' + o.text);
+                    else onOutput(o.text);
+                });
+            }
+        } catch (e) {
+            console.log = console.log; // 恢复
+            // 提取错误行号
+            let errMsg = e.message || String(e);
+            if (e instanceof SyntaxError) {
+                errMsg = `语法错误: ${errMsg}`;
+            }
+            onError(errMsg);
         }
     }
 
     async installPackage(name) {
-        // 模拟包安装
-        return new Promise((resolve) => {
-            setTimeout(() => {
-                resolve({ success: true, message: `${name} 安装成功` });
-            }, 1000);
-        });
+        if (!this.pyodide) {
+            throw new Error('Python 环境尚未加载');
+        }
+        await this.pyodide.loadPackage(name);
+        return true;
     }
 }
 
-// 初始化编译器
+// 初始化
 document.addEventListener('DOMContentLoaded', () => {
     window.compiler = new Compiler();
 });
