@@ -49,30 +49,38 @@
         </div>
     </header>
 
-    <!-- 编辑器 -->
-    <div class="editor-area" id="editor-area">
-        <textarea id="code-editor" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off"
-            placeholder="# 在这里输入代码...
+    <!-- 主工作区 -->
+    <div class="workspace" id="workspace">
+        <!-- 编辑器 -->
+        <div class="editor-wrap" id="editor-wrap">
+            <textarea id="code-editor" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off"
+                placeholder="# 在这里输入代码...
 print('Hello, OnlineCode!')"></textarea>
-    </div>
-
-    <!-- 输出面板 -->
-    <div class="output-panel" id="output-panel">
-        <div class="output-header">
-            <span>输出</span>
-            <div class="output-tabs">
-                <button class="otab active" data-tab="console">控制台</button>
-                <button class="otab" data-tab="graphics">图形</button>
-                <button class="otab" data-tab="canvas3d">3D</button>
-            </div>
-            <button class="otab-close" id="output-close">&times;</button>
         </div>
-        <div class="output-body">
-            <div class="opanel active" id="panel-console">
-                <div id="console-output" class="console"></div>
+
+        <!-- 拖拽分割线 -->
+        <div class="resizer" id="resizer">
+            <div class="resizer-handle"></div>
+        </div>
+
+        <!-- 输出面板 -->
+        <div class="output-wrap" id="output-wrap">
+            <div class="output-header">
+                <span>输出</span>
+                <div class="output-tabs">
+                    <button class="otab active" data-tab="console">控制台</button>
+                    <button class="otab" data-tab="graphics">图形</button>
+                    <button class="otab" data-tab="canvas3d">3D</button>
+                </div>
+                <button class="otab-close" id="output-close">&times;</button>
             </div>
-            <div class="opanel" id="panel-graphics"><canvas id="graphics-canvas"></canvas></div>
-            <div class="opanel" id="panel-canvas3d"><canvas id="canvas-3d"></canvas></div>
+            <div class="output-body">
+                <div class="opanel active" id="panel-console">
+                    <div id="console-output" class="console"></div>
+                </div>
+                <div class="opanel" id="panel-graphics"><canvas id="graphics-canvas"></canvas></div>
+                <div class="opanel" id="panel-canvas3d"><canvas id="canvas-3d"></canvas></div>
+            </div>
         </div>
     </div>
 

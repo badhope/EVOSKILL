@@ -100,6 +100,143 @@ class OnlineCode {
                 timer = setTimeout(() => this.saveCode(true), 2000);
             }
         });
+
+        // 初始化resizer拖拽
+        this.initResizer();
+        
+        // 恢复输出面板状态
+        const savedCollapsed = localStorage.getItem('oc_output_collapsed');
+        if (savedCollapsed === 'true') {
+            document.getElementById('output-wrap').classList.add('collapsed');
+            document.getElementById('tb-output').classList.remove('active');
+        } else {
+            document.getElementById('output-wrap').classList.remove('collapsed');
+            document.getElementById('tb-output').classList.add('active');
+        }
+    }
+
+    // 初始化拖拽调整大小
+    initResizer() {
+        const resizer = document.getElementById('resizer');
+        const editorWrap = document.getElementById('editor-wrap');
+        const outputWrap = document.getElementById('output-wrap');
+        const workspace = document.getElementById('workspace');
+        
+        let isDragging = false;
+        let startPos = 0;
+        let startEditorSize = 0;
+        let startOutputSize = 0;
+        let isHorizontal = false;
+        
+        const onStart = (e) => {
+            isDragging = true;
+            isHorizontal = window.innerWidth >= 768 && window.matchMedia('(orientation: landscape)').matches;
+            startPos = isHorizontal ? (e.touches ? e.touches[0].clientX : e.clientX) : (e.touches ? e.touches[0].clientY : e.clientY);
+            
+            const editorRect = editorWrap.getBoundingClientRect();
+            const outputRect = outputWrap.getBoundingClientRect();
+            
+            if (isHorizontal) {
+                startEditorSize = editorRect.width;
+                startOutputSize = outputRect.width;
+            } else {
+                startEditorSize = editorRect.height;
+                startOutputSize = outputRect.height;
+            }
+            
+            resizer.classList.add('dragging');
+            document.body.style.cursor = isHorizontal ? 'col-resize' : 'row-resize';
+            document.body.style.userSelect = 'none';
+            
+            // 防止触摸时滚动
+            if (e.touches) e.preventDefault();
+        };
+        
+        const onMove = (e) => {
+            if (!isDragging) return;
+            
+            const currentPos = isHorizontal ? (e.touches ? e.touches[0].clientX : e.clientX) : (e.touches ? e.touches[0].clientY : e.clientY);
+            const delta = currentPos - startPos;
+            
+            if (isHorizontal) {
+                // 横屏：左右分栏
+                const newEditorWidth = Math.max(200, startEditorSize + delta);
+                const newOutputWidth = Math.max(200, startOutputSize - delta);
+                editorWrap.style.flex = 'none';
+                editorWrap.style.width = newEditorWidth + 'px';
+                outputWrap.style.flex = 'none';
+                outputWrap.style.width = newOutputWidth + 'px';
+            } else {
+                // 竖屏：上下分栏
+                const newEditorHeight = Math.max(100, startEditorSize + delta);
+                const newOutputHeight = Math.max(100, startOutputSize - delta);
+                editorWrap.style.flex = 'none';
+                editorWrap.style.height = newEditorHeight + 'px';
+                outputWrap.style.flex = 'none';
+                outputWrap.style.height = newOutputHeight + 'px';
+            }
+            
+            if (e.touches) e.preventDefault();
+        };
+        
+        const onEnd = () => {
+            if (!isDragging) return;
+            isDragging = false;
+            resizer.classList.remove('dragging');
+            document.body.style.cursor = '';
+            document.body.style.userSelect = '';
+            
+            // 保存当前尺寸比例
+            const workspaceRect = workspace.getBoundingClientRect();
+            if (isHorizontal) {
+                const editorWidth = editorWrap.getBoundingClientRect().width;
+                localStorage.setItem('oc_split_ratio', (editorWidth / workspaceRect.width).toFixed(3));
+            } else {
+                const editorHeight = editorWrap.getBoundingClientRect().height;
+                localStorage.setItem('oc_split_ratio', (editorHeight / workspaceRect.height).toFixed(3));
+            }
+        };
+        
+        // 鼠标事件
+        resizer.addEventListener('mousedown', onStart);
+        document.addEventListener('mousemove', onMove);
+        document.addEventListener('mouseup', onEnd);
+        
+        // 触摸事件
+        resizer.addEventListener('touchstart', onStart, { passive: false });
+        document.addEventListener('touchmove', onMove, { passive: false });
+        document.addEventListener('touchend', onEnd);
+        
+        // 恢复保存的尺寸比例
+        const savedRatio = localStorage.getItem('oc_split_ratio');
+        if (savedRatio) {
+            const ratio = parseFloat(savedRatio);
+            const workspaceRect = workspace.getBoundingClientRect();
+            isHorizontal = window.innerWidth >= 768 && window.matchMedia('(orientation: landscape)').matches;
+            
+            if (isHorizontal) {
+                editorWrap.style.flex = 'none';
+                editorWrap.style.width = (workspaceRect.width * ratio) + 'px';
+                outputWrap.style.flex = 'none';
+                outputWrap.style.width = (workspaceRect.width * (1 - ratio)) + 'px';
+            } else {
+                editorWrap.style.flex = 'none';
+                editorWrap.style.height = (workspaceRect.height * ratio) + 'px';
+                outputWrap.style.flex = 'none';
+                outputWrap.style.height = (workspaceRect.height * (1 - ratio)) + 'px';
+            }
+        }
+        
+        // 窗口大小改变时重置flex布局
+        window.addEventListener('resize', () => {
+            editorWrap.style.flex = '';
+            editorWrap.style.width = '';
+            editorWrap.style.height = '';
+            outputWrap.style.flex = '';
+            outputWrap.style.width = '';
+            outputWrap.style.height = '';
+            localStorage.removeItem('oc_split_ratio');
+        });
     }
 
     switchLang(lang) {
@@ -115,15 +252,25 @@ class OnlineCode {
     }
 
     toggleOutput() {
-        const panel = document.getElementById('output-panel');
+        const panel = document.getElementById('output-wrap');
         const btn = document.getElementById('tb-output');
-        panel.classList.toggle('open');
-        btn.classList.toggle('active', panel.classList.contains('open'));
+        panel.classList.toggle('collapsed');
+        btn.classList.toggle('active', !panel.classList.contains('collapsed'));
+        
+        // 保存折叠状态
+        localStorage.setItem('oc_output_collapsed', panel.classList.contains('collapsed'));
     }
 
     closeOutput() {
-        document.getElementById('output-panel').classList.remove('open');
+        document.getElementById('output-wrap').classList.add('collapsed');
         document.getElementById('tb-output').classList.remove('active');
+        localStorage.setItem('oc_output_collapsed', 'true');
+    }
+    
+    openOutput() {
+        document.getElementById('output-wrap').classList.remove('collapsed');
+        document.getElementById('tb-output').classList.add('active');
+        localStorage.setItem('oc_output_collapsed', 'false');
     }
 
     openMenu() {
@@ -169,7 +316,7 @@ class OnlineCode {
         this.showToast('运行中...', true);
 
         // 打开输出面板
-        document.getElementById('output-panel').classList.add('open');
+        this.openOutput();
         const con = document.getElementById('console-output');
         con.innerHTML = '';
         this.log('info', `>>> ${this.currentLang.toUpperCase()} 运行中...`);
