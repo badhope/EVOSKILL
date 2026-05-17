@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OnlineCode - 纯前端离线多语言编译器</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#1a1a2e">
+    <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
+</head>
+<body>
+    <div id="app">
+        <!-- 顶部导航 -->
+        <header class="header">
+            <div class="logo">
+                <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="16 18 22 12 16 6"></polyline>
+                    <polyline points="8 6 2 12 8 18"></polyline>
+                </svg>
+                <span class="logo-text">OnlineCode</span>
+            </div>
+            <nav class="nav">
+                <button class="nav-btn active" data-lang="python">Python</button>
+                <button class="nav-btn" data-lang="cpp">C/C++</button>
+                <button class="nav-btn" data-lang="rust">Rust</button>
+                <button class="nav-btn" data-lang="go">Go</button>
+                <button class="nav-btn" data-lang="js">JavaScript</button>
+            </nav>
+            <div class="actions">
+                <button class="btn-icon" id="btn-packages" title="包管理">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                    </svg>
+                </button>
+                <button class="btn-icon" id="btn-3d" title="3D绘图">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+                    </svg>
+                </button>
+                <button class="btn-icon" id="btn-settings" title="设置">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                    </svg>
+                </button>
+            </div>
+        </header>
+
+        <!-- 主体区域 -->
+        <main class="main">
+            <!-- 左侧代码编辑器 -->
+            <section class="editor-section">
+                <div class="editor-header">
+                    <span class="filename">main.py</span>
+                    <div class="editor-actions">
+                        <button class="btn-small" id="btn-load">加载</button>
+                        <button class="btn-small" id="btn-save">保存</button>
+                        <button class="btn-small" id="btn-share">分享</button>
+                    </div>
+                </div>
+                <div class="editor-container">
+                    <textarea id="code-editor" spellcheck="false" placeholder="# 在这里输入代码...
+print('Hello, OnlineCode!')"></textarea>
+                </div>
+                <div class="editor-toolbar">
+                    <button class="btn-run" id="btn-run">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                        </svg>
+                        运行
+                    </button>
+                    <button class="btn-stop" id="btn-stop" disabled>
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <rect x="6" y="6" width="12" height="12"></rect>
+                        </svg>
+                        停止
+                    </button>
+                    <span class="status" id="status">就绪</span>
+                </div>
+            </section>
+
+            <!-- 右侧输出/可视化区域 -->
+            <section class="output-section">
+                <div class="output-tabs">
+                    <button class="tab-btn active" data-tab="console">控制台</button>
+                    <button class="tab-btn" data-tab="graphics">图形</button>
+                    <button class="tab-btn" data-tab="canvas3d">3D画布</button>
+                </div>
+                <div class="output-content">
+                    <div class="tab-panel active" id="panel-console">
+                        <div id="console-output" class="console">
+                            <div class="console-line console-info">OnlineCode v1.0.0 - 纯前端离线编译器</div>
+                            <div class="console-line console-info">支持语言: Python, C/C++, Rust, Go, JavaScript</div>
+                            <div class="console-line console-info">点击"运行"开始执行代码...</div>
+                        </div>
+                    </div>
+                    <div class="tab-panel" id="panel-graphics">
+                        <canvas id="graphics-canvas"></canvas>
+                    </div>
+                    <div class="tab-panel" id="panel-canvas3d">
+                        <canvas id="canvas-3d"></canvas>
+                        <div class="canvas3d-controls">
+                            <button class="btn-small" id="btn-reset-cam">重置视角</button>
+                            <button class="btn-small" id="btn-toggle-wire">线框模式</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- 底部状态栏 -->
+        <footer class="footer">
+            <div class="footer-left">
+                <span id="lang-status">Python 3.11</span>
+                <span class="separator">|</span>
+                <span id="runtime-status">Pyodide 加载中...</span>
+            </div>
+            <div class="footer-right">
+                <span id="cursor-pos">Ln 1, Col 1</span>
+                <span class="separator">|</span>
+                <span>UTF-8</span>
+            </div>
+        </footer>
+    </div>
+
+    <!-- 包管理弹窗 -->
+    <div class="modal" id="modal-packages">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>📦 包管理器</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="package-search">
+                    <input type="text" id="package-search" placeholder="搜索包...">
+                    <button class="btn-primary" id="btn-search-package">搜索</button>
+                </div>
+                <div class="package-list" id="package-list">
+                    <div class="package-item">
+                        <span class="package-name">numpy</span>
+                        <span class="package-version">1.24.0</span>
+                        <button class="btn-small">安装</button>
+                    </div>
+                    <div class="package-item">
+                        <span class="package-name">matplotlib</span>
+                        <span class="package-version">3.7.0</span>
+                        <button class="btn-small">安装</button>
+                    </div>
+                    <div class="package-item">
+                        <span class="package-name">pandas</span>
+                        <span class="package-version">2.0.0</span>
+                        <button class="btn-small">安装</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 设置弹窗 -->
+    <div class="modal" id="modal-settings">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>⚙️ 设置</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="setting-item">
+                    <label>主题</label>
+                    <select id="theme-select">
+                        <option value="dark">深色</option>
+                        <option value="light">浅色</option>
+                        <option value="high-contrast">高对比度</option>
+                    </select>
+                </div>
+                <div class="setting-item">
+                    <label>字体大小</label>
+                    <input type="range" id="font-size" min="12" max="24" value="14">
+                    <span id="font-size-value">14px</span>
+                </div>
+                <div class="setting-item">
+                    <label>自动保存</label>
+                    <input type="checkbox" id="auto-save" checked>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 加载遮罩 -->
+    <div class="loading-overlay" id="loading-overlay">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">正在初始化编译环境...</div>
+    </div>
+
+    <script src="js/app.js"></script>
+    <script src="js/editor.js"></script>
+    <script src="js/compiler.js"></script>
+    <script src="js/packages.js"></script>
+</body>
+</html>

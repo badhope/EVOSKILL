@@ -1,199 +1,82 @@
-# 📱 Banana Toolbox - 安卓工具箱
+# 🚀 OnlineCode
 
-> 一款多功能手机工具箱应用，集文件管理、应用管理、网络工具、实用小工具于一体。
+> 纯前端离线多语言编译器 | 支持Python/C/C++/Rust/Go | 3D绘图 | 移动端适配 | 无需后端
 
-## 🎯 产品定位
+[![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Live-brightgreen)](https://badhope.github.io/OnlineCode)
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-对标产品：ES文件浏览器、一个木函、MT管理器
+## ✨ 特性
 
-**核心特点：**
-- 🗂️ 强大的文件管理能力
-- 🧰 丰富的实用小工具集合
-- ⚡ 轻量快速，无广告
-- 🎨 现代化 Material You 设计
+- 🌐 **纯前端** - 无需后端服务器，完全在浏览器中运行
+- 🔄 **离线支持** - PWA技术，可离线使用
+- 🐍 **多语言** - Python, C/C++, Rust, Go, JavaScript
+- 📦 **包管理** - 在线安装Python包（通过Pyodide）
+- 🎨 **3D绘图** - 内置Three.js支持3D可视化
+- 📱 **移动端** - 响应式设计，手机平板完美适配
+- 🎨 **深色主题** - 舒适的代码编辑体验
+- 💾 **自动保存** - 代码自动保存到本地
 
----
+## 🚀 在线体验
 
-## 🏗️ 技术架构
+👉 **[https://badhope.github.io/OnlineCode](https://badhope.github.io/OnlineCode)**
 
-| 模块 | 技术选型 |
-|------|----------|
-| 开发语言 | Kotlin |
-| UI 框架 | Jetpack Compose |
-| 架构模式 | MVVM + Clean Architecture |
-| 依赖注入 | Hilt |
-| 数据存储 | Room + DataStore |
-| 文件操作 | Kotlin Coroutines + Flow |
-| 网络层 | OkHttp + Retrofit |
+## 🛠️ 技术栈
 
----
+- **前端框架**: 原生 JavaScript (ES6+)
+- **Python运行时**: [Pyodide](https://pyodide.org/) (WebAssembly)
+- **3D绘图**: [Three.js](https://threejs.org/)
+- **样式**: CSS3 + Flexbox/Grid
+- **PWA**: Service Worker + Manifest
 
-## 📦 功能模块设计
-
-### 1️⃣ 文件管理器（核心模块）
+## 📦 项目结构
 
 ```
-功能清单：
-├── 文件浏览（列表/网格视图切换）
-├── 文件操作（复制/移动/删除/重命名）
-├── 搜索功能（按名称/类型/大小/日期）
-├── 压缩解压（ZIP/RAR/7Z）
-├── 文件分类（图片/视频/音频/文档/安装包）
-├── 存储分析（大文件/重复文件/垃圾清理）
-├── 远程访问（FTP/SMB/WebDAV）
-└── 安全空间（加密文件夹）
+OnlineCode/
+├── index.html          # 主页面
+├── manifest.json       # PWA配置
+├── sw.js              # Service Worker
+├── styles/
+│   └── main.css       # 主样式
+├── js/
+│   ├── app.js         # 主应用逻辑
+│   ├── editor.js      # 代码编辑器
+│   ├── compiler.js    # 编译器模块
+│   └── packages.js    # 包管理器
+└── assets/            # 图标资源
 ```
 
-### 2️⃣ 应用管理
+## 🏃 本地运行
 
-```
-功能清单：
-├── 应用列表（用户应用/系统应用）
-├── 批量卸载
-├── 应用备份（导出 APK）
-├── 权限查看
-├── 自启动管理
-└── 应用详情（签名/版本/路径）
-```
+```bash
+# 克隆仓库
+git clone https://github.com/badhope/OnlineCode.git
+cd OnlineCode
 
-### 3️⃣ 网络工具
+# 启动本地服务器
+python3 -m http.server 8000
 
-```
-功能清单：
-├── 网速测试
-├── 网络诊断（Ping/TraceRoute/DNS查询）
-├── 局域网扫描
-├── 端口扫描
-└── Whois 查询
+# 访问 http://localhost:8000
 ```
 
-### 4️⃣ 实用小工具
+## 🗺️ 开发路线图
 
-```
-功能清单：
-├── 单位换算器
-├── 颜色取值器
-├── 二维码生成/扫描
-├── 文本处理（编码/解码/加解密）
-├── 图片处理（压缩/格式转换/水印）
-├── 设备信息查看
-├── 剪贴板历史
-└── 计算器
-```
+- [x] 基础框架搭建
+- [x] 代码编辑器
+- [x] Python执行 (Pyodide)
+- [x] JavaScript执行
+- [x] 包管理器UI
+- [x] PWA支持
+- [ ] C/C++编译 (WebAssembly)
+- [ ] Rust编译 (WebAssembly)
+- [ ] Go编译 (WebAssembly)
+- [ ] 3D绘图功能
+- [ ] 代码分享功能
+- [ ] 主题切换
+- [ ] 文件系统支持
 
----
+## 🤝 贡献
 
-## 📁 项目结构
-
-```
-app/
-├── build.gradle.kts
-├── src/
-│   └── main/
-│       ├── AndroidManifest.xml
-│       ├── java/com/banana/toolbox/
-│       │   ├── BananaToolboxApp.kt          # Application 入口
-│       │   ├── ui/                          # UI 层
-│       │   │   ├── theme/                   # 主题配置
-│       │   │   ├── navigation/              # 导航路由
-│       │   │   ├── components/              # 通用组件
-│       │   │   └── screens/                 # 页面
-│       │   │       ├── home/                # 首页
-│       │   │       ├── filemanager/         # 文件管理
-│       │   │       ├── appmanager/          # 应用管理
-│       │   │       ├── network/             # 网络工具
-│       │   │       └── tools/               # 小工具
-│       │   ├── domain/                      # 业务层
-│       │   │   ├── usecase/                 # 用例
-│       │   │   ├── model/                   # 领域模型
-│       │   │   └── repository/              # 仓库接口
-│       │   ├── data/                        # 数据层
-│       │   │   ├── repository/              # 仓库实现
-│       │   │   ├── local/                   # 本地数据源
-│       │   │   └── remote/                  # 远程数据源
-│       │   ├── di/                          # 依赖注入模块
-│       │   └── util/                        # 工具类
-│       └── res/
-│           ├── drawable/
-│           ├── mipmap/
-│           └── values/
-├── feature-filemanager/                     # 文件管理模块（动态特性）
-├── feature-appmanager/                      # 应用管理模块
-├── feature-network/                         # 网络工具模块
-├── feature-tools/                           # 小工具模块
-├── core-common/                             # 公共基础库
-├── core-ui/                                 # UI 基础库
-└── build.gradle.kts
-```
-
----
-
-## 🎨 UI 设计规范
-
-**设计语言：** Material Design 3 (Material You)
-
-**配色方案：**
-- 主色：动态取色（跟随系统壁纸）
-- 支持深色模式
-- 支持多主题切换
-
-**关键页面：**
-1. **首页** - 功能模块入口卡片布局
-2. **文件列表** - 支持多选、排序、视图切换
-3. **工具详情** - 各工具独立页面
-
----
-
-## 🚀 开发路线图
-
-### Phase 1 - MVP（预计 2 周）
-- [x] 项目初始化
-- [ ] 基础架构搭建
-- [ ] 文件浏览核心功能
-- [ ] 基础 UI 框架
-
-### Phase 2 - 文件管理完善（预计 2 周）
-- [ ] 文件操作（复制/移动/删除）
-- [ ] 搜索功能
-- [ ] 压缩解压
-
-### Phase 3 - 应用管理（预计 1 周）
-- [ ] 应用列表
-- [ ] 批量卸载
-- [ ] 应用备份
-
-### Phase 4 - 网络工具（预计 1 周）
-- [ ] 网速测试
-- [ ] 网络诊断
-
-### Phase 5 - 小工具集合（预计 2 周）
-- [ ] 二维码工具
-- [ ] 单位换算
-- [ ] 文本处理
-- [ ] 图片处理
-
----
-
-## 📋 开发规范
-
-### Git 提交规范
-```
-feat: 新功能
-fix: 修复 bug
-refactor: 重构
-docs: 文档更新
-style: 代码格式
-test: 测试相关
-chore: 构建/工具
-```
-
-### 分支策略
-- `main` - 主分支，稳定版本
-- `develop` - 开发分支
-- `feature/*` - 功能分支
-- `hotfix/*` - 紧急修复
-
----
+欢迎提交Issue和PR！
 
 ## 📄 许可证
 
