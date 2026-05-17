@@ -13,10 +13,16 @@
 </head>
 <body>
 <div id="app">
-    <!-- 顶栏：极简 -->
+    <!-- 顶栏：极简一行 -->
     <header class="topbar">
-        <div class="topbar-left">
-            <span class="brand">&lt;/&gt;</span>
+        <div class="topbar-brand">
+            <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="16 18 22 12 16 6"></polyline>
+                <polyline points="8 6 2 12 8 18"></polyline>
+            </svg>
+            <span class="logo-text">OnlineCode</span>
+        </div>
+        <div class="topbar-center">
             <select class="lang-picker" id="lang-picker">
                 <option value="python" selected>Python</option>
                 <option value="cpp">C / C++</option>
@@ -25,12 +31,20 @@
                 <option value="js">JavaScript</option>
             </select>
         </div>
-        <div class="topbar-right">
-            <button class="tb-btn" id="tb-output" aria-label="输出面板">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        <div class="topbar-actions">
+            <button class="tb-btn tb-output" id="tb-output" aria-label="输出">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="3" width="20" height="14" rx="2"/>
+                    <line x1="8" y1="21" x2="16" y2="21"/>
+                    <line x1="12" y1="17" x2="12" y2="21"/>
+                </svg>
             </button>
-            <button class="tb-btn" id="tb-menu" aria-label="菜单">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+            <button class="tb-btn tb-menu" id="tb-menu" aria-label="菜单">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="5" r="2"/>
+                    <circle cx="12" cy="12" r="2"/>
+                    <circle cx="12" cy="19" r="2"/>
+                </svg>
             </button>
         </div>
     </header>

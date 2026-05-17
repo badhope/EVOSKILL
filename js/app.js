@@ -115,11 +115,15 @@ class OnlineCode {
     }
 
     toggleOutput() {
-        document.getElementById('output-panel').classList.toggle('open');
+        const panel = document.getElementById('output-panel');
+        const btn = document.getElementById('tb-output');
+        panel.classList.toggle('open');
+        btn.classList.toggle('active', panel.classList.contains('open'));
     }
 
     closeOutput() {
         document.getElementById('output-panel').classList.remove('open');
+        document.getElementById('tb-output').classList.remove('active');
     }
 
     openMenu() {

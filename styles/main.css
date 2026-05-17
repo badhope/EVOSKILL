@@ -33,44 +33,110 @@ body{
   background:#0d1117;
 }
 
-/* ===== 顶栏 ===== */
+/* ===== 顶栏：极简一行 ===== */
 .topbar{
   flex-shrink:0;
-  height:44px;
+  height:48px;
   display:flex;
   align-items:center;
   justify-content:space-between;
-  padding:0 8px;
+  padding:0 12px;
   padding-top:env(safe-area-inset-top,0px);
-  background:#161b22;
-  border-bottom:1px solid #30363d;
+  background:#0d1117;
+  border-bottom:1px solid #21262d;
   z-index:10;
 }
 
-.topbar-left{display:flex;align-items:center;gap:6px}
-.brand{font-family:'SF Mono',Menlo,monospace;font-size:15px;font-weight:700;color:#58a6ff}
+/* 品牌区 */
+.topbar-brand{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  min-width:0;
+}
+
+.logo-icon{
+  width:22px;
+  height:22px;
+  color:#58a6ff;
+  flex-shrink:0;
+}
+
+.logo-text{
+  font-size:16px;
+  font-weight:600;
+  color:#e6edf3;
+  letter-spacing:-0.3px;
+}
+
+@media (max-width:360px){
+  .logo-text{display:none}
+}
+
+/* 中间语言选择 */
+.topbar-center{
+  position:absolute;
+  left:50%;
+  transform:translateX(-50%);
+}
 
 .lang-picker{
   appearance:none;
   -webkit-appearance:none;
-  background:#21262d;
-  border:1px solid #30363d;
-  border-radius:16px;
-  color:#e6edf3;
-  font-size:13px;
+  background:transparent;
+  border:none;
+  color:#8b949e;
+  font-size:14px;
   font-weight:500;
-  padding:4px 26px 4px 10px;
-  max-width:120px;
+  padding:6px 24px 6px 12px;
   cursor:pointer;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%238b949e' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%2358a6ff' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
   background-repeat:no-repeat;
   background-position:right 8px center;
+  text-align:center;
+  min-width:80px;
 }
 
-.topbar-right{display:flex;align-items:center;gap:2px}
-.tb-btn{width:40px;height:40px;display:flex;align-items:center;justify-content:center;background:none;border:none;color:#8b949e;cursor:pointer;border-radius:8px}
-.tb-btn:active{background:#21262d}
-.tb-btn svg{width:20px;height:20px}
+.lang-picker:focus{
+  outline:none;
+  color:#58a6ff;
+}
+
+/* 右侧操作区 */
+.topbar-actions{
+  display:flex;
+  align-items:center;
+  gap:4px;
+}
+
+.tb-btn{
+  width:36px;
+  height:36px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:none;
+  border:none;
+  color:#8b949e;
+  cursor:pointer;
+  border-radius:10px;
+  transition:all .15s;
+}
+
+.tb-btn:active{
+  background:#21262d;
+  color:#e6edf3;
+}
+
+.tb-btn svg{
+  width:20px;
+  height:20px;
+}
+
+.tb-output.active{
+  color:#58a6ff;
+  background:rgba(88,166,255,.1);
+}
 
 /* ===== 编辑器区域 - 占满剩余 ===== */
 .editor-area{
