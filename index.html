@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="mobile-web-app-capable" content="yes">
@@ -12,229 +12,171 @@
     <meta name="theme-color" content="#0d1117">
 </head>
 <body>
-    <div id="app">
-        <!-- 顶部栏：极简，一行搞定 -->
-        <header class="header">
-            <div class="header-left">
-                <span class="logo-text">&lt;/&gt;</span>
-                <span class="logo-name">OnlineCode</span>
-            </div>
-            <div class="header-center">
-                <select class="lang-select" id="lang-select">
-                    <option value="python" selected>🐍 Python</option>
-                    <option value="cpp">⚡ C/C++</option>
-                    <option value="rust">🦀 Rust</option>
-                    <option value="go">🔵 Go</option>
-                    <option value="js">🟨 JavaScript</option>
-                </select>
-            </div>
-            <div class="header-right">
-                <button class="btn-icon" id="btn-more" aria-label="更多">
-                    <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>
-                </button>
-            </div>
-        </header>
-
-        <!-- 主体：上下分栏，可拖拽分割 -->
-        <main class="main" id="main">
-            <!-- 代码编辑区 -->
-            <section class="editor-section" id="editor-section">
-                <div class="section-bar">
-                    <span class="section-label">📝 代码</span>
-                    <span class="filename" id="filename">main.py</span>
-                </div>
-                <div class="editor-wrap">
-                    <textarea id="code-editor" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off"
-                        placeholder="# 在这里输入代码...
-print('Hello, OnlineCode!')"></textarea>
-                </div>
-            </section>
-
-            <!-- 分割线（可拖拽） -->
-            <div class="divider" id="divider">
-                <div class="divider-handle"></div>
-            </div>
-
-            <!-- 输出区 -->
-            <section class="output-section" id="output-section">
-                <div class="section-bar">
-                    <div class="output-tabs">
-                        <button class="tab-btn active" data-tab="console">控制台</button>
-                        <button class="tab-btn" data-tab="graphics">图形</button>
-                        <button class="tab-btn" data-tab="canvas3d">3D</button>
-                    </div>
-                    <button class="btn-clear" id="btn-clear-console" aria-label="清空">🗑</button>
-                </div>
-                <div class="output-content">
-                    <div class="tab-panel active" id="panel-console">
-                        <div id="console-output" class="console">
-                            <div class="console-line console-info">OnlineCode v1.0 · 纯前端离线编译器</div>
-                            <div class="console-line console-info">点击 ▶ 运行代码</div>
-                        </div>
-                    </div>
-                    <div class="tab-panel" id="panel-graphics">
-                        <canvas id="graphics-canvas"></canvas>
-                    </div>
-                    <div class="tab-panel" id="panel-canvas3d">
-                        <canvas id="canvas-3d"></canvas>
-                    </div>
-                </div>
-            </section>
-        </main>
-
-        <!-- 底部工具栏：运行 + 状态 -->
-        <footer class="bottom-bar">
-            <div class="bottom-bar-left">
-                <button class="btn-run" id="btn-run" aria-label="运行代码">
-                    <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"/></svg>
-                </button>
-                <button class="btn-stop" id="btn-stop" disabled aria-label="停止">
-                    <svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>
-                </button>
-            </div>
-            <div class="status-bar" id="status-bar">
-                <span class="status-dot"></span>
-                <span id="status-text">就绪</span>
-            </div>
-            <div class="bottom-bar-right">
-                <span class="cursor-info" id="cursor-pos">1:1</span>
-            </div>
-        </footer>
-
-        <!-- 底部导航（移动端） -->
-        <nav class="bottom-nav" id="bottom-nav">
-            <button class="nav-item active" data-panel="editor" aria-label="代码">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
-                <span>代码</span>
-            </button>
-            <button class="nav-item" data-panel="output" aria-label="输出">
+<div id="app">
+    <!-- 顶栏：极简一行 -->
+    <header class="topbar">
+        <div class="topbar-left">
+            <span class="brand">&lt;/&gt;</span>
+            <select class="lang-picker" id="lang-picker">
+                <option value="python" selected>Python</option>
+                <option value="cpp">C / C++</option>
+                <option value="rust">Rust</option>
+                <option value="go">Go</option>
+                <option value="js">JavaScript</option>
+            </select>
+        </div>
+        <div class="topbar-right">
+            <button class="tb-btn" id="tb-output" aria-label="输出面板">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-                <span>输出</span>
             </button>
-            <button class="nav-item" data-panel="packages" aria-label="包管理">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
-                <span>包管理</span>
+            <button class="tb-btn" id="tb-menu" aria-label="菜单">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
             </button>
-            <button class="nav-item" data-panel="settings" aria-label="设置">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-                <span>设置</span>
-            </button>
-        </nav>
+        </div>
+    </header>
+
+    <!-- 编辑器：占满剩余空间 -->
+    <div class="editor-area" id="editor-area">
+        <textarea id="code-editor" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off"
+            placeholder="# 在这里输入代码...
+print('Hello, OnlineCode!')"></textarea>
     </div>
 
-    <!-- 更多菜单（弹出层） -->
-    <div class="sheet-overlay" id="sheet-overlay"></div>
-    <div class="bottom-sheet" id="sheet-more">
-        <div class="sheet-handle"></div>
-        <div class="sheet-title">更多操作</div>
-        <div class="sheet-actions">
-            <button class="sheet-action" id="btn-save">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-                <span>保存代码</span>
-            </button>
-            <button class="sheet-action" id="btn-load">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                <span>加载代码</span>
-            </button>
-            <button class="sheet-action" id="btn-share">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
-                <span>分享代码</span>
-            </button>
-            <button class="sheet-action" id="btn-fullscreen">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
-                <span>全屏编辑</span>
-            </button>
+    <!-- 输出面板：从底部滑出 -->
+    <div class="output-panel" id="output-panel">
+        <div class="output-header">
+            <span>输出</span>
+            <div class="output-tabs">
+                <button class="otab active" data-tab="console">控制台</button>
+                <button class="otab" data-tab="graphics">图形</button>
+                <button class="otab" data-tab="canvas3d">3D</button>
+            </div>
+            <button class="otab-close" id="output-close">&times;</button>
+        </div>
+        <div class="output-body">
+            <div class="opanel active" id="panel-console">
+                <div id="console-output" class="console"></div>
+            </div>
+            <div class="opanel" id="panel-graphics"><canvas id="graphics-canvas"></canvas></div>
+            <div class="opanel" id="panel-canvas3d"><canvas id="canvas-3d"></canvas></div>
         </div>
     </div>
 
-    <!-- 包管理弹窗 -->
-    <div class="sheet-overlay" id="sheet-overlay-pkg"></div>
-    <div class="bottom-sheet" id="sheet-packages">
-        <div class="sheet-handle"></div>
-        <div class="sheet-title">📦 包管理器</div>
-        <div class="sheet-search">
-            <input type="text" id="package-search" placeholder="搜索包名..." autocomplete="off">
-            <button class="btn-search" id="btn-search-package">搜索</button>
-        </div>
-        <div class="package-list" id="package-list">
-            <div class="package-item">
-                <div class="package-info">
-                    <span class="package-name">numpy</span>
-                    <span class="package-desc">科学计算</span>
-                </div>
-                <button class="btn-install" data-name="numpy">安装</button>
-            </div>
-            <div class="package-item">
-                <div class="package-info">
-                    <span class="package-name">matplotlib</span>
-                    <span class="package-desc">绘图库</span>
-                </div>
-                <button class="btn-install" data-name="matplotlib">安装</button>
-            </div>
-            <div class="package-item">
-                <div class="package-info">
-                    <span class="package-name">pandas</span>
-                    <span class="package-desc">数据分析</span>
-                </div>
-                <button class="btn-install" data-name="pandas">安装</button>
-            </div>
-            <div class="package-item">
-                <div class="package-info">
-                    <span class="package-name">requests</span>
-                    <span class="package-desc">HTTP请求</span>
-                </div>
-                <button class="btn-install" data-name="requests">安装</button>
-            </div>
-            <div class="package-item">
-                <div class="package-info">
-                    <span class="package-name">pillow</span>
-                    <span class="package-desc">图像处理</span>
-                </div>
-                <button class="btn-install" data-name="pillow">安装</button>
-            </div>
+    <!-- 浮动运行按钮 -->
+    <button class="fab" id="fab-run" aria-label="运行">
+        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"/></svg>
+    </button>
+    <button class="fab fab-stop" id="fab-stop" aria-label="停止" style="display:none">
+        <svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>
+    </button>
+
+    <!-- 运行状态提示条 -->
+    <div class="run-toast" id="run-toast">
+        <span class="toast-dot"></span>
+        <span id="toast-text">就绪</span>
+    </div>
+</div>
+
+<!-- 菜单面板 -->
+<div class="overlay" id="menu-overlay"></div>
+<div class="menu-panel" id="menu-panel">
+    <div class="menu-section">
+        <div class="menu-title">文件</div>
+        <button class="menu-item" id="mi-save">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+            <span>保存代码</span>
+        </button>
+        <button class="menu-item" id="mi-load">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            <span>加载代码</span>
+        </button>
+        <button class="menu-item" id="mi-share">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+            <span>分享代码</span>
+        </button>
+        <button class="menu-item" id="mi-clear">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+            <span>清空代码</span>
+        </button>
+    </div>
+    <div class="menu-section">
+        <div class="menu-title">工具</div>
+        <button class="menu-item" id="mi-packages">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+            <span>包管理器</span>
+            <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+        <button class="menu-item" id="mi-fullscreen">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
+            <span>全屏模式</span>
+        </button>
+    </div>
+    <div class="menu-section">
+        <div class="menu-title">设置</div>
+        <button class="menu-item" id="mi-settings">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            <span>字体大小 / 主题 / 自动保存</span>
+            <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+    </div>
+</div>
+
+<!-- 包管理子面板 -->
+<div class="sub-panel" id="sub-packages">
+    <div class="sub-header">
+        <button class="sub-back" id="pkg-back">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <span>包管理器</span>
+    </div>
+    <div class="sub-search">
+        <input type="text" id="package-search" placeholder="搜索包名..." autocomplete="off">
+        <button class="btn-go" id="btn-search-package">搜索</button>
+    </div>
+    <div class="pkg-list" id="package-list">
+        <div class="pkg-item"><div><b>numpy</b><small>科学计算</small></div><button class="btn-install" data-name="numpy">安装</button></div>
+        <div class="pkg-item"><div><b>matplotlib</b><small>绘图库</small></div><button class="btn-install" data-name="matplotlib">安装</button></div>
+        <div class="pkg-item"><div><b>pandas</b><small>数据分析</small></div><button class="btn-install" data-name="pandas">安装</button></div>
+        <div class="pkg-item"><div><b>requests</b><small>HTTP请求</small></div><button class="btn-install" data-name="requests">安装</button></div>
+        <div class="pkg-item"><div><b>pillow</b><small>图像处理</small></div><button class="btn-install" data-name="pillow">安装</button></div>
+    </div>
+</div>
+
+<!-- 设置子面板 -->
+<div class="sub-panel" id="sub-settings">
+    <div class="sub-header">
+        <button class="sub-back" id="settings-back">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <span>设置</span>
+    </div>
+    <div class="setting-row">
+        <span>主题</span>
+        <select id="theme-select"><option value="dark">深色</option><option value="light">浅色</option></select>
+    </div>
+    <div class="setting-row">
+        <span>字体大小</span>
+        <div class="size-ctrl">
+            <button class="size-btn" id="font-dec">-</button>
+            <span id="font-val">14</span>
+            <button class="size-btn" id="font-inc">+</button>
         </div>
     </div>
-
-    <!-- 设置弹窗 -->
-    <div class="sheet-overlay" id="sheet-overlay-settings"></div>
-    <div class="bottom-sheet" id="sheet-settings">
-        <div class="sheet-handle"></div>
-        <div class="sheet-title">⚙️ 设置</div>
-        <div class="settings-list">
-            <div class="setting-row">
-                <span class="setting-label">主题</span>
-                <select class="setting-select" id="theme-select">
-                    <option value="dark">深色</option>
-                    <option value="light">浅色</option>
-                </select>
-            </div>
-            <div class="setting-row">
-                <span class="setting-label">字体大小</span>
-                <div class="font-size-control">
-                    <button class="btn-size" id="font-decrease">A-</button>
-                    <span class="font-size-value" id="font-size-value">14</span>
-                    <button class="btn-size" id="font-increase">A+</button>
-                </div>
-            </div>
-            <div class="setting-row">
-                <span class="setting-label">自动保存</span>
-                <label class="toggle">
-                    <input type="checkbox" id="auto-save" checked>
-                    <span class="toggle-slider"></span>
-                </label>
-            </div>
-        </div>
+    <div class="setting-row">
+        <span>自动保存</span>
+        <label class="sw"><input type="checkbox" id="auto-save" checked><span class="sw-track"></span></label>
     </div>
+</div>
 
-    <!-- 加载遮罩 -->
-    <div class="loading-overlay" id="loading-overlay">
-        <div class="loading-spinner"></div>
-        <div class="loading-text">正在初始化编译环境...</div>
-    </div>
+<!-- 加载遮罩 -->
+<div class="loading" id="loading">
+    <div class="spinner"></div>
+    <span>初始化中...</span>
+</div>
 
-    <script src="js/app.js"></script>
-    <script src="js/editor.js"></script>
-    <script src="js/compiler.js"></script>
-    <script src="js/packages.js"></script>
+<script src="js/app.js"></script>
+<script src="js/editor.js"></script>
+<script src="js/compiler.js"></script>
+<script src="js/packages.js"></script>
 </body>
 </html>
