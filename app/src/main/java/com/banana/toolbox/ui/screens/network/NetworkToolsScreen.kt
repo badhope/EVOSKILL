@@ -166,6 +166,7 @@ fun StatusItem(label: String, value: String, icon: ImageVector) {
 /**
  * 工具卡片
  */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ToolCard(
     icon: ImageVector,

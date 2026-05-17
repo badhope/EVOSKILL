@@ -128,7 +128,7 @@ fun AppManagerScreen(
             }
             
             // 应用统计
-            AppStatistics()
+            AppStatisticsBar()
             
             // 应用列表
             AppListContent(
@@ -152,7 +152,7 @@ fun AppManagerScreen(
  * 应用统计栏
  */
 @Composable
-fun AppStatistics() {
+fun AppStatisticsBar() {
     Surface(
         color = MaterialTheme.colorScheme.surfaceVariant,
         tonalElevation = 1.dp

@@ -693,7 +693,7 @@ private fun PasswordGeneratorTab(
                         onCheckedChange = { viewModel.setIncludeUppercase(it) }
                     )
                 }
-                HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp))
+                Divider(modifier = Modifier.padding(vertical = 4.dp))
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically
@@ -708,7 +708,7 @@ private fun PasswordGeneratorTab(
                         onCheckedChange = { viewModel.setIncludeLowercase(it) }
                     )
                 }
-                HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp))
+                Divider(modifier = Modifier.padding(vertical = 4.dp))
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically
@@ -723,7 +723,7 @@ private fun PasswordGeneratorTab(
                         onCheckedChange = { viewModel.setIncludeDigits(it) }
                     )
                 }
-                HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp))
+                Divider(modifier = Modifier.padding(vertical = 4.dp))
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically
@@ -738,7 +738,7 @@ private fun PasswordGeneratorTab(
                         onCheckedChange = { viewModel.setIncludeSpecial(it) }
                     )
                 }
-                HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp))
+                Divider(modifier = Modifier.padding(vertical = 4.dp))
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically
@@ -1327,7 +1327,7 @@ private fun PasswordStrengthTab(
                             modifier = Modifier.fillMaxWidth()
                         )
                         Spacer(modifier = Modifier.height(8.dp))
-                        HorizontalDivider()
+                        Divider()
                         Spacer(modifier = Modifier.height(8.dp))
                         Row(
                             modifier = Modifier.fillMaxWidth(),

@@ -75,6 +75,7 @@ data class ModuleItem(
     val isNew: Boolean = false
 )
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ModuleCard(module: ModuleItem) {
     ElevatedCard(
